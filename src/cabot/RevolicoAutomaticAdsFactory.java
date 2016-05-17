@@ -7,28 +7,19 @@
 package cabot;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
-import org.controlsfx.glyphfont.FontAwesome;
-import org.controlsfx.glyphfont.Glyph;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import postautomaticads.AutomaticAdsAdapter;
-import postautomaticads.AutomaticAdsEvent;
 import postautomaticads.CaptchaService;
 import postautomaticads.ConnectionConfig;
 import postautomaticads.HttpConnection;
 import postautomaticads.RevolicoAutomaticAds;
 import postautomaticads.RevolicoScrapper;
 import postautomaticads.Scrapper;
-import postautomaticads.TwoCaptchaService;
-import postautomaticads.models.Advertisement;
 
 /**
  *
@@ -91,7 +82,12 @@ public class RevolicoAutomaticAdsFactory {
     
     private Scrapper getScrappingEngine(String host, CaptchaService service, ConnectionConfig config, Map<String, String> scrapConfig, Map<String, String> captchaOptions) {
         Capabilities caps = new DesiredCapabilities();
-        ((DesiredCapabilities) caps).setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, appDirectory + File.separator + "phantomjs");
+        String phantomjs = "phantomjs";
+        String os = System.getProperty("os.name");
+        if(os.startsWith("Windows")){
+            phantomjs += ".exe";
+        }
+        ((DesiredCapabilities) caps).setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, appDirectory + File.separator + phantomjs);
         WebDriver driver= new PhantomJSDriver(caps);
         return new RevolicoScrapper(host, driver, service, config, scrapConfig, captchaOptions);
     }

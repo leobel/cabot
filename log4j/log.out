@@ -2362,3 +2362,38 @@ java.lang.IllegalStateException: JobStore is shutdown - aborting retry
 	at org.quartz.core.QuartzSchedulerThread.releaseIfScheduleChangedSignificantly(QuartzSchedulerThread.java:432)
 	at org.quartz.core.QuartzSchedulerThread.run(QuartzSchedulerThread.java:316)
 Scheduler MyScheduler_$_NON_CLUSTERED shutdown complete.
+MLog clients using log4j logging.
+Initializing c3p0-0.9.1.1 [built 15-March-2007 01:32:31; debug? true; trace: 10]
+Using default implementation for ThreadExecutor
+Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+Quartz Scheduler v.2.2.2 created.
+Using thread monitor-based data access locking (synchronization).
+JobStoreTX initialized.
+Scheduler meta-data: Quartz Scheduler (v2.2.2) 'MyScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 15 threads.
+  Using job-store 'org.quartz.impl.jdbcjobstore.JobStoreTX' - which supports persistence. and is not clustered.
+
+Quartz scheduler 'MyScheduler' initialized from an externally provided properties instance.
+Quartz scheduler version: 2.2.2
+JobFactory set to: cabot.GuiceJobFactory@2dbdc12e
+Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hge1569g1hhxit8el8col|31a38f95, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> org.h2.Driver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hge1569g1hhxit8el8col|31a38f95, idleConnectionTestPeriod -> 0, initialPoolSize -> 3, jdbcUrl -> jdbc:h2:/Users/leobel/Library/Application Support/Cabot/cabot, lastAcquisitionFailureDefaultUser -> null, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 30, maxStatements -> 0, maxStatementsPerConnection -> 120, minPoolSize -> 1, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ]
+Freed 0 triggers from 'acquired' / 'blocked' state.
+Recovering 0 jobs that were in-progress at the time of the last shut-down.
+Recovery complete.
+Removed 0 'complete' triggers.
+Removed 0 stale fired job entries.
+Scheduler MyScheduler_$_NON_CLUSTERED started.
+LOG-WARN-DIALOG at Tue May 17 18:24:04 CDT 2016
+El servicio está temporalmente suspendido.
+Detalles:
+No tiene suficiente saldo para realizar la operación. Contacte a su proveedor para más información.
+LOG-WARN-DIALOG
+LOG-WARN-DIALOG at Tue May 17 18:27:02 CDT 2016
+El servicio está temporalmente suspendido.
+Detalles:
+No tiene suficiente saldo para realizar la operación. Contacte a su proveedor para más información.
+LOG-WARN-DIALOG
