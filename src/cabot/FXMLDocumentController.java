@@ -787,17 +787,22 @@ public class FXMLDocumentController implements Initializable {
         try {
             gson = new Gson();
             InputStream in = Cabot.class.getResourceAsStream("/settings.json");
-            Settings settings = gson.fromJson(new InputStreamReader(in), Settings.class);
-            String appDirectory = System.getProperty("user.home") + settings.getAppDirectory();
+            Settings settgs = gson.fromJson(new InputStreamReader(in), Settings.class);
+            String originalDirectory = settgs.getAppDirectory();
+            String os = System.getProperty("os.name");
+            if(os.startsWith("Windows")){
+                originalDirectory = "\\Documents\\Cabot";
+            }
+            String appDirectory = System.getProperty("user.home") + originalDirectory;
             File file = new File(appDirectory, "settings.json");
             if(file.exists()){
-                settings = gson.fromJson(new FileReader(file), Settings.class);
+                settgs = gson.fromJson(new FileReader(file), Settings.class);
             }
             else{
-                settings.setAppDirectory(appDirectory);
-                writeSettings(settings, file.getAbsolutePath());
+                settgs.setAppDirectory(appDirectory);
+                writeSettings(settgs, file.getAbsolutePath());
             }
-            this.settings = settings;
+            this.settings = settgs;
             
             // Gmail config
             DATA_STORE_DIR = new java.io.File(this.settings.getAppDirectory(), ".credentials/gmail-java.json");
@@ -805,7 +810,7 @@ public class FXMLDocumentController implements Initializable {
             SCOPES = Arrays.asList(GmailScopes.GMAIL_LABELS, GmailScopes.GMAIL_READONLY, GmailScopes.GMAIL_MODIFY,GmailScopes.MAIL_GOOGLE_COM);
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-            File credentials = new File(settings.getAppDirectory() + File.separator + "client_secret.json");
+            File credentials = new File(settgs.getAppDirectory() + File.separator + "client_secret.json");
             if(!credentials.exists())
                 showGmailCredentials();
             credential = authorize(credentials);

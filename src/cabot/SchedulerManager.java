@@ -143,6 +143,5 @@ public class SchedulerManager {
 
     void close() throws SchedulerException {
         scheduler.shutdown();
-        //automaticAds.close();
     }
 }
