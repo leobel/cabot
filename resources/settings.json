@@ -1,0 +1,23 @@
+{
+    "connection": {
+        "useProxy": false,
+        "proxyHost": "",
+        "proxyPort": "",
+        "useAuthentication": false,
+        "username": "",
+        "password": ""
+    },
+    "service": {
+        "waitingTime": "10",
+        "key": "ea7dbc1caeee650f3109e04869e1f106",
+        "status": "Ok",
+        "statusDetails": ""
+    },
+    "email": {
+        "emailFolder": "INBOX",
+        "deleteEmail": false,
+        "insertEveryDay": true
+    },
+    "appDirectory": "/Library/Application Support/Cabot",
+    "host": "http://negdesign.ddns.net"
+}

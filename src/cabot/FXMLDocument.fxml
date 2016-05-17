@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--<?import org.controlsfx.control.MasterDetailPane?>-->
+
+<VBox prefWidth="900.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cabot.FXMLDocumentController">
+   <MenuBar>
+     <menus>
+       <Menu mnemonicParsing="false" text="Inicio">
+         <items>
+                <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Configuración" />
+                <MenuItem mnemonicParsing="false" onAction="#exit" text="Salir" />
+         </items>
+       </Menu>
+       <Menu mnemonicParsing="false" text="Ayuda">
+         <items>
+           <MenuItem mnemonicParsing="false" text="Acerca de" />
+         </items>
+       </Menu>
+     </menus>
+   </MenuBar>
+    <BorderPane>
+      <center>
+         <TabPane fx:id="mainContent" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+           <tabs>
+             <Tab fx:id="advertisementTab" text="Anuncios">
+               <content>
+                 <AnchorPane minHeight="0.0" minWidth="0.0">
+                        <children>
+                              <TableView fx:id="table">
+                                  <placeholder>
+                                      <Label text="" />
+                                  </placeholder>
+                                <columns>
+                                  <TableColumn fx:id="titleColumn" editable="false" maxWidth="-Infinity" minWidth="500.0" prefWidth="500.0" text="Título" />
+                                    <TableColumn fx:id="categoryColumn" editable="false" maxWidth="-Infinity" minWidth="300.0" prefWidth="300.0" text="Categoría" />
+                                 <TableColumn fx:id="publishedColumn" maxWidth="-Infinity" minWidth="100.0" prefWidth="100.0" text="Publicado" />
+                                </columns>
+                              </TableView>
+                        </children>
+                     </AnchorPane>
+               </content>
+             </Tab>
+             <Tab fx:id="triggerTab" text="Tareas Automáticas">
+               <content>
+                 <AnchorPane>
+                        <children>
+                           <!--<MasterDetailPane fx:id="masterDetailPane" dividerPosition="0.7" prefHeight="400.0" prefWidth="800.0" />-->
+                           <TableView fx:id="triggerTableView" layoutX="2.0" layoutY="2.0" prefHeight="395.0" prefWidth="595.0">
+                             <columns>
+                                <TableColumn fx:id="startDateColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Fecha de inicio" />
+                                <TableColumn fx:id="endDateColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Fecha de fin" />
+                                <TableColumn fx:id="stateColumn" maxWidth="-1.0" minWidth="110.0" prefWidth="110.0" text="Estado" />
+                                <TableColumn fx:id="nextFireColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Proxima ejecución" />
+                             </columns>
+                           </TableView>
+                           <VBox layoutX="598.0" layoutY="2.0" prefHeight="395.0" prefWidth="300.0">
+                              <children>
+                                 <TitledPane animated="false" collapsible="false" text="Descripción">
+                                   <content>
+                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                          <children>
+                                             <Label fx:id="triggerDescription" alignment="TOP_LEFT" layoutX="14.0" layoutY="14.0" prefHeight="150.0" prefWidth="310.0" wrapText="true" />
+                                          </children>
+                                       </AnchorPane>
+                                   </content>
+                                 </TitledPane>
+                                 <TitledPane animated="false" collapsible="false" text="Anuncio">
+                                   <content>
+                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                          <children>
+                                             <Label fx:id="advertisementTitle" alignment="TOP_LEFT" layoutX="14.0" layoutY="14.0" prefHeight="150.0" prefWidth="310.0" wrapText="true" />
+                                          </children>
+                                       </AnchorPane>
+                                   </content>
+                                 </TitledPane>
+                              </children>
+                           </VBox>
+                        </children>
+                 </AnchorPane>
+               </content>
+             </Tab>
+           </tabs>
+         </TabPane>
+      </center>
+      <top>
+         <HBox prefHeight="80.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+            <children>
+               <VBox>
+                  <children>
+                     <Label text="Anuncio">
+                        <padding>
+                           <Insets left="7.0" />
+                        </padding></Label>
+                     <ToolBar style="-fx-background-color: transparent;">
+                       <items>
+                         <Button fx:id="addAdvertisement" mnemonicParsing="false" onAction="#addAdvertisement" text="Agregar" />
+                         <Button fx:id="deleteAdvertisement" disable="true" mnemonicParsing="false" onAction="#deleteAdvertisement" text="Eliminar" />
+                       </items>
+                     </ToolBar>
+                  </children>
+                  <HBox.margin>
+                     <Insets right="50.0" />
+                  </HBox.margin>
+               </VBox>
+               <VBox>
+                  <children>
+                     <Label text="Tarea Automática">
+                        <VBox.margin>
+                           <Insets left="5.0" />
+                        </VBox.margin></Label>
+                     <ToolBar style="-fx-background-color: transparent;">
+                       <items>
+                           <Button fx:id="addTrigger" disable="true" mnemonicParsing="false" onAction="#addTrigger" text="Agregar" />
+                           <Button fx:id="startTrigger" disable="true" mnemonicParsing="false" onAction="#startTrigger" text="Iniciar" />
+                         <Button fx:id="stopTrigger" disable="true" mnemonicParsing="false" onAction="#stopTrigger" text="Detener" />
+                           <Button fx:id="deleteTrigger" disable="true" mnemonicParsing="false" onAction="#deleteTrigger" text="Eliminar" />
+                       </items>
+                     </ToolBar>
+                  </children>
+                  <padding>
+                     <Insets left="50.0" />
+                  </padding>
+               </VBox>
+               <VBox prefHeight="80.0" prefWidth="340.0">
+                  <children>
+                     <HBox alignment="CENTER" prefHeight="60.0">
+                        <children>
+                           <Label alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="225.0" text="Balance:">
+                              <HBox.margin>
+                                 <Insets top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Label>
+                           <Label fx:id="balanceLabel" alignment="CENTER" prefHeight="29.0" prefWidth="160.0" wrapText="true">
+                              <font>
+                                 <Font size="24.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets top="10.0" />
+                              </HBox.margin>
+                           </Label>
+                        </children>
+                        <VBox.margin>
+                           <Insets />
+                        </VBox.margin>
+                     </HBox>
+                     <HBox alignment="CENTER" prefHeight="20.0">
+                        <children>
+                           <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="257.0" text="Publicaciones:">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
+                           </Label>
+                           <Label fx:id="publishedLabel" alignment="CENTER" prefHeight="18.0" prefWidth="193.0">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
+                           </Label>
+                        </children>
+                     </HBox>
+                  </children>
+                  <HBox.margin>
+                     <Insets left="20.0" />
+                  </HBox.margin>
+               </VBox>
+            </children>
+         </HBox>
+      </top>
+      <bottom>
+          <VBox fx:id="footer" prefHeight="65">
+              <BorderPane fx:id="bPane" prefHeight="65">
+                  <bottom>
+                      
+                  </bottom>
+              </BorderPane>
+          </VBox>
+      </bottom>
+      </BorderPane>
+</VBox>
