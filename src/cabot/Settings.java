@@ -62,11 +62,32 @@ public class Settings {
     public class Service {
         private String waitingTime;
         private String key;
+        private String username;
+        private String password;
         private String status;
         private String statusDetails;
+        private Boolean shot;
+        private Boolean twoService;
+        private Boolean dbcService;
         
         public String getKey(){
             return key;
+        }
+        
+        public String getUsername(){
+            return username;
+        }
+        
+        public void setUsername(String username){
+            this.username = username;
+        }
+        
+        public String getPassword(){
+            return password;
+        }
+        
+        public void setPassword(String password){
+            this.password = password;
         }
         
         public String getWaitingTime(){
@@ -95,6 +116,30 @@ public class Settings {
         
         public void setStatusDetails(String details){
             statusDetails = details;
+        }
+
+        public Boolean getShot() {
+            return shot;
+        }
+        
+        public void setShot(Boolean shot){
+            this.shot = shot;
+        }
+        
+        public Boolean getTwoService(){
+            return twoService;
+        }
+        
+        public void setTwoService(Boolean service){
+            this.twoService = service;
+        }
+        
+        public Boolean getDbcService(){
+            return dbcService;
+        }
+        
+        public void setDbcService(Boolean service){
+            this.dbcService = service;
         }
         
     }

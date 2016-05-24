@@ -151,6 +151,22 @@ public class SettingsController {
         twoCaptchaService.setToggleGroup(radioToggleGroup);
         dbcService.setToggleGroup(radioToggleGroup);
         
+        if(settings.getService().getTwoService()){
+            radioToggleGroup.selectToggle(radioToggleGroup.getToggles().get(0));
+            serviceKey.setDisable(false);
+            usernameLabel.setDisable(true);
+            passwordLabel.setDisable(true);
+            dbcUsername.setDisable(true);
+            dbcPassword.setDisable(true);
+        }
+        else{
+            radioToggleGroup.selectToggle(radioToggleGroup.getToggles().get(1));
+            serviceKey.setDisable(true);
+            usernameLabel.setDisable(false);
+            passwordLabel.setDisable(false);
+            dbcUsername.setDisable(false);
+            dbcPassword.setDisable(false);
+        }
         
         radioToggleGroup.selectedToggleProperty().addListener((ov, oldValue, newValue) -> {
             RadioButton rb = ((RadioButton) radioToggleGroup.getSelectedToggle());
