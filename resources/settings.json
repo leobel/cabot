@@ -10,14 +10,20 @@
     "service": {
         "waitingTime": "10",
         "key": "ea7dbc1caeee650f3109e04869e1f106",
+        "username": "leobel",
+        "password": "publicator",
         "status": "Ok",
-        "statusDetails": ""
+        "statusDetails": "",
+        "shot": true,
+        "twoService": true,
+        "dbcService": false
     },
     "email": {
         "emailFolder": "INBOX",
         "deleteEmail": false,
         "insertEveryDay": true
     },
-    "appDirectory": "/Library/Application Support/Cabot",
+    "appDirectory": "/Library/Application Support/Cabot-1",
     "host": "http://negdesign.ddns.net"
+
 }

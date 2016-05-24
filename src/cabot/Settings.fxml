@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
@@ -94,6 +95,7 @@
                           <rowConstraints>
                             <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -103,29 +105,34 @@
                               <RowConstraints valignment="TOP" vgrow="ALWAYS" />
                           </rowConstraints>
                            <children>
-                              <TextField fx:id="serviceKey" maxWidth="430.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                              <Label fx:id="twoCaptchaServiceLabel" text="Llave del servicio" GridPane.rowIndex="2" />
-                              <Label text="minutos" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+                              <TextField fx:id="serviceKey" maxWidth="430.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                              <Label fx:id="twoCaptchaServiceLabel" text="Llave del servicio" GridPane.rowIndex="3" />
+                              <Label text="minutos" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin>
                               </Label>
-                              <TextField fx:id="waitingTime" maxWidth="40.0" text="10" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
+                              <TextField fx:id="waitingTime" maxWidth="40.0" text="10" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+                                 <GridPane.margin>
+                                    <Insets left="30.0" />
+                                 </GridPane.margin></TextField>
                               <Label text="Tiempo de espera" />
-                              <Label text="Estado del Servicio:" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
-                              <Label fx:id="serviceStatus" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.rowIndex="6">
+                              <Label text="Estado del Servicio:" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
+                              <Label fx:id="serviceStatus" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.rowIndex="7">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding></Label>
-                              <Label text="Detalles" GridPane.rowIndex="7" />
-                              <Label fx:id="statusDetails" prefWidth="570.0" style="-fx-background-color: #FFFFFF;" wrapText="true" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8" />
-                              <CheckBox fx:id="resetService" mnemonicParsing="false" text="Reiniciar Servicio" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="7" />
-                              <RadioButton fx:id="twoCaptchaService" mnemonicParsing="false" selected="true" text="2Captcha Service" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                              <RadioButton fx:id="dbcService" disable="true" mnemonicParsing="false" text="Death By Captcha Service" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                              <Label fx:id="usernameLabel" disable="true" text="usuario" GridPane.rowIndex="4" />
-                              <Label fx:id="passwordLabel" disable="true" text="contraseña" GridPane.rowIndex="5" />
-                              <TextField fx:id="dbcUsername" disable="true" maxWidth="430.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                              <TextField fx:id="dbcPassword" disable="true" maxWidth="430.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+                              <Label text="Detalles" GridPane.rowIndex="8" />
+                              <Label fx:id="statusDetails" prefWidth="570.0" style="-fx-background-color: #FFFFFF;" wrapText="true" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="9" />
+                              <CheckBox fx:id="resetService" mnemonicParsing="false" text="Reiniciar Servicio" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+                              <RadioButton fx:id="twoCaptchaService" mnemonicParsing="false" selected="true" text="2Captcha Service" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                              <RadioButton fx:id="dbcService" mnemonicParsing="false" text="Death By Captcha Service" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+                              <Label fx:id="usernameLabel" disable="true" text="usuario" GridPane.rowIndex="5" />
+                              <Label fx:id="passwordLabel" disable="true" text="contraseña" GridPane.rowIndex="6" />
+                              <TextField fx:id="dbcUsername" disable="true" maxWidth="430.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+                              <Label text="Host" GridPane.rowIndex="1" />
+                              <TextField fx:id="host" maxWidth="430.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                              <PasswordField fx:id="dbcPassword" disable="true" maxWidth="430.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
                            </children>
                         </GridPane>
                      </children>

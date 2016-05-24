@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -45,6 +46,9 @@ public class SettingsController {
     
     @FXML
     private TextField waitingTime;
+    
+    @FXML
+    private TextField host;
     
     @FXML
     private TextField serviceKey;
@@ -83,7 +87,7 @@ public class SettingsController {
     private TextField dbcUsername;
     
     @FXML
-    private TextField dbcPassword;
+    private PasswordField dbcPassword;
     
     
     private Settings settings;
@@ -107,6 +111,8 @@ public class SettingsController {
     }
     
     private void updateSettings() {
+        
+       settings.setHost(host.getText());
        ConnectionSetting connection = settings.getConnection();
        connection.setUseProxy(useProxy.isSelected());
        connection.setUseAuthentication(useAuthentication.isSelected());
@@ -117,6 +123,10 @@ public class SettingsController {
        
        Service service = settings.getService();
        service.setKey(serviceKey.getText());
+       service.setUsername(dbcUsername.getText());
+       service.setPassword(dbcPassword.getText());
+       service.setTwoService(twoCaptchaService.isSelected());
+       service.setDbcService(dbcService.isSelected());
        service.setWaitingTime(waitingTime.getText());
        if(resetService.isSelected()){
            service.setStatus("Ok");
@@ -140,7 +150,10 @@ public class SettingsController {
         userPassword.textProperty().set(settings.getConnection().getPassword());
         
         waitingTime.textProperty().set(settings.getService().getWaitingTime());
+        host.textProperty().set(settings.getHost());
         serviceKey.textProperty().set(settings.getService().getKey());
+        dbcUsername.textProperty().set(settings.getService().getUsername());
+        dbcPassword.textProperty().set(settings.getService().getPassword());
         serviceStatus.textProperty().set(settings.getService().getStatus());
         statusDetails.textProperty().set(settings.getService().getStatusDetails());
         
@@ -151,6 +164,12 @@ public class SettingsController {
         twoCaptchaService.setToggleGroup(radioToggleGroup);
         dbcService.setToggleGroup(radioToggleGroup);
         
+        if(settings.getService().getTwoService()){
+            radioToggleGroup.selectToggle(radioToggleGroup.getToggles().get(0));
+        }
+        else{
+            radioToggleGroup.selectToggle(radioToggleGroup.getToggles().get(1));
+        }
         
         radioToggleGroup.selectedToggleProperty().addListener((ov, oldValue, newValue) -> {
             RadioButton rb = ((RadioButton) radioToggleGroup.getSelectedToggle());
@@ -161,6 +180,8 @@ public class SettingsController {
                    passwordLabel.setDisable(true);
                    dbcUsername.setDisable(true);
                    dbcPassword.setDisable(true);
+                   settings.getService().setTwoService(true);
+                   settings.getService().setDbcService(false);
                 }
                 else{
                    twoCaptchaServiceLabel.setDisable(true);
@@ -169,6 +190,8 @@ public class SettingsController {
                    passwordLabel.setDisable(false);
                    dbcUsername.setDisable(false);
                    dbcPassword.setDisable(false);
+                   settings.getService().setTwoService(false);
+                   settings.getService().setDbcService(true);
                 }
         });
     }

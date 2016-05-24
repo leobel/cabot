@@ -28,11 +28,14 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
@@ -51,6 +54,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -97,6 +101,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.HyperlinkLabel;
@@ -110,6 +115,7 @@ import postautomaticads.AutomaticAdsAdapter;
 import postautomaticads.AutomaticAdsEvent;
 import postautomaticads.CaptchaService;
 import postautomaticads.ConnectionConfig;
+import postautomaticads.DeathByCaptchaService;
 import postautomaticads.HttpConnection;
 import postautomaticads.TwoCaptchaError.TwoCaptchaError;
 import postautomaticads.TwoCaptchaService;
@@ -196,6 +202,7 @@ public class FXMLDocumentController implements Initializable {
     
     private RevolicoAdvertisementDao advertisement;
     private SchedulerManager schedulerManager;
+    private RevolicoAutomaticAdsFactory factory;
     private ObservableList<RevolicoAdvertisementModel> items;
     private ObservableList<JobModel> triggers;
 
@@ -294,6 +301,7 @@ public class FXMLDocumentController implements Initializable {
             
             setUpDataConfig();
         } catch (SchedulerException | IOException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error iniciando el control principal\n" + ex.getMessage() + "\nLOG-EXCEPTION");
             Cabot.showExceptionDialog(ex, "Error iniciando el control principal");
         } 
         
@@ -440,7 +448,8 @@ public class FXMLDocumentController implements Initializable {
             SettingsController controller = ((SettingsController)fxmlLoader.getController());
             controller.start(settings, this);
         } catch (IOException ex) {
-            Cabot.showExceptionDialog(ex, "Error insertando el anuncio");
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error abriendo las configuraciones\n" + ex.getMessage() + "\nLOG-EXCEPTION");
+            Cabot.showExceptionDialog(ex, "Error abriendo las configuraciones");
         }
     }
     
@@ -464,6 +473,7 @@ public class FXMLDocumentController implements Initializable {
             controller.setContext(advertisement, schedulerManager);
             controller.start();
         } catch (IOException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error insertando el anuncio\n" + ex.getMessage() + "\nLOG-EXCEPTION");            
             Cabot.showExceptionDialog(ex, "Error insertando el anuncio");
         }
     }
@@ -478,6 +488,7 @@ public class FXMLDocumentController implements Initializable {
                 schedulerManager.deleteJob(jobKey.get(0), jobKey.get(1));
             }
         } catch (SchedulerException | SQLException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error eliminando el anuncio\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
             Cabot.showExceptionDialog(ex, "Error eliminando el anuncio");
         }
     }
@@ -497,6 +508,7 @@ public class FXMLDocumentController implements Initializable {
             controller.start();
             
         } catch (IOException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error insertando la tarea automática\n" + ex.getMessage() + "\nLOG-EXCEPTION");            
             Cabot.showExceptionDialog(ex, "Error insertando la tarea automática");
         }
     }
@@ -505,9 +517,10 @@ public class FXMLDocumentController implements Initializable {
     private void startTrigger(ActionEvent ae){
         try {
             schedulerManager.startTrigger(selectedTrigger.getTriggerName(), selectedTrigger.getTriggerGroup());
-             ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
+            ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
             updateTriggers(triggs);
         } catch (SchedulerException | SQLException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error iniciando la tarea automática\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
             Cabot.showExceptionDialog(ex, "Error iniciando la tarea automática");
         }
     }
@@ -519,6 +532,7 @@ public class FXMLDocumentController implements Initializable {
             ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
             updateTriggers(triggs);
         } catch (SchedulerException | SQLException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error deteniendo la tarea automática\n" + ex.getMessage() + "\nLOG-EXCEPTION");                                   
             Cabot.showExceptionDialog(ex, "Error deteniendo la tarea automática");
         }
     }
@@ -528,8 +542,11 @@ public class FXMLDocumentController implements Initializable {
         try {
             if(showDeleteConfirmation("Eliminar Tarea Automática", "¿Está seguro que quiere eliminar la tarea?", "")){
                 schedulerManager.deleteTrigger(selectedTrigger.getTriggerName(), selectedTrigger.getTriggerGroup());
+                ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
+                updateTriggers(triggs);
             }
-        } catch (SchedulerException ex) {
+        } catch (SchedulerException | SQLException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error eliminando la tarea automática\n" + ex.getMessage() + "\nLOG-EXCEPTION");
             Cabot.showExceptionDialog(ex, "Error eliminado la tarea automática");            
         }
     }
@@ -547,56 +564,32 @@ public class FXMLDocumentController implements Initializable {
                 if(sql != null){
                     ScriptRunner runner = new ScriptRunner(c, false, false);
                     InputStream is = getClass().getResourceAsStream("/db/" + sql);
-                    runner.runScript(new InputStreamReader(is));
+                    runner.runScript(new InputStreamReader(is, "ISO-8859-1"));
                 }
             }
             
         } catch (ClassNotFoundException | SQLException | IOException ex) {
-            Cabot.showExceptionDialog(ex, "Error conectandose a la base de datos");
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error conectándose a la base de datos\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
+            Cabot.showExceptionDialog(ex, "Error conectándose a la base de datos");
         }
         return c;
         
     }
 
-    private RevolicoAutomaticAdsFactory createRevolicoAutomaticAdsFactory() throws IOException, Exception {
-        ConnectionSetting connSettings = settings.getConnection();
-        ConnectionConfig config = new ConnectionConfig(connSettings.getUseProxy(), connSettings.getProxyHost(), connSettings.getProxyPort(), connSettings.getUseAuthentication(), connSettings.getUserName(), connSettings.getPassword());
-        HttpConnection connIn = new HttpConnection(TwoCaptchaService.getUploadURL(),"UTF-8", config);
-        HttpConnection connRes = new HttpConnection(TwoCaptchaService.getResponseUrl(),"UTF-8", config);
-        Map<String, String> options = new HashMap();
-        Integer time = Integer.parseInt(settings.getService().getWaitingTime()) * 60 * 1000;
-        options.put("timeout", time.toString()); // wait 10 minutes for the service to complete
-        captchService = new TwoCaptchaService(settings.getService().getKey(), connIn, connRes, options, config);
-        Map<String, String> captchaOptions = new HashMap<>();
-        Map<String, String> scrappOptions = new HashMap<>();
-
-        scrappOptions.put("insertPage", "insertar-anuncio.html");
-        scrappOptions.put("updatePage", "modificar-anuncio.html");
-        scrappOptions.put("formName", "insertad");
-        scrappOptions.put("captchaResponseField", "recaptcha_response_field");
-        scrappOptions.put("captchaChallengeImage", "recaptcha_challenge_image");
-        scrappOptions.put("insertTitle", "Insertar un anuncio - Revolico");
-        scrappOptions.put("updateTitle", "Modificar Anuncio - Revolico");
-        scrappOptions.put("advertisementMessage", "ad_message");
-        scrappOptions.put("responseText", "headingText");
-        scrappOptions.put("advertisementShowBody", "Ver el anuncio");
-        scrappOptions.put("errorText", "errorText");
-        scrappOptions.put("responseInsertOK", "Tu anuncio ha sido insertado satisfactoriamente");
-        scrappOptions.put("responseUpdateOk", "Tu anuncio ha sido modificado satisfactoriamente");
-        scrappOptions.put("responseValidateFail", "Es necesario que revises los campos que están resaltados en color rojo, para poder enviar los datos.");
-        scrappOptions.put("captchaError", "captcha_error");
-        scrappOptions.put("emailSubjectFirst", "Revolico - ID del Anuncio: ");
-        scrappOptions.put("emailSubjectLast", "Datos de modificación/eliminación");
+    private RevolicoAutomaticAdsFactory createRevolicoAutomaticAdsFactory() throws IOException {
         
-        scrappOptions.put("emailFolder", settings.getEmail().getEmailFolder());
-        scrappOptions.put("deleteEmail", settings.getEmail().getDeleteEmail().toString());
-        scrappOptions.put("insertEveryDay", settings.getEmail().getInsertEveryDay().toString());
+        
+        Map<String, String> captchaOptions = new HashMap<>();
+        Map<String, String> scrappOptions = createScrappOptions();
 
         String host = settings.getHost();
         
         //testing installer resources get loaded (phantomjs), remove later !!!
         //getScrappingEngine(host, service, config, scrappOptions, captchaOptions);
-        
+        ConnectionSetting connSettings = settings.getConnection();
+        ConnectionConfig config = new ConnectionConfig(connSettings.getUseProxy(), connSettings.getProxyHost(), connSettings.getProxyPort(), connSettings.getUseAuthentication(), connSettings.getUserName(), connSettings.getPassword());
+
+        captchService = createService(config);
 
         AutomaticAdsAdapter adapter = new AutomaticAdsAdapter(){
 
@@ -638,13 +631,60 @@ public class FXMLDocumentController implements Initializable {
             }
         };
 
-        return new RevolicoAutomaticAdsFactory(advertisement, settings.getAppDirectory(), config, connIn, connRes, options, captchService, captchaOptions, scrappOptions, host, adapter);
+        return new RevolicoAutomaticAdsFactory(advertisement, settings.getAppDirectory(), config, captchService, captchaOptions, scrappOptions, host, adapter);
+    }
+
+    private Map<String, String> createScrappOptions() {
+        Map<String, String> scrappOptions = new HashMap<>();
+        scrappOptions.put("insertPage", "insertar-anuncio.html");
+        scrappOptions.put("updatePage", "modificar-anuncio.html");
+        scrappOptions.put("formName", "insertad");
+        scrappOptions.put("captchaResponseField", "recaptcha_response_field");
+        scrappOptions.put("catpchaChallengeField", "recaptcha_challenge_field");
+        scrappOptions.put("captchaChallengeImage", "recaptcha_challenge_image");
+        scrappOptions.put("insertTitle", "Insertar un anuncio - Revolico");
+        scrappOptions.put("updateTitle", "Modificar Anuncio - Revolico");
+        scrappOptions.put("advertisementMessage", "ad_message");
+        scrappOptions.put("responseText", "headingText");
+        scrappOptions.put("advertisementShowBody", "Ver el anuncio");
+        scrappOptions.put("errorText", "errorText");
+        scrappOptions.put("responseInsertOK", "Tu anuncio ha sido insertado satisfactoriamente");
+        scrappOptions.put("responseUpdateOk", "Tu anuncio ha sido modificado satisfactoriamente");
+        scrappOptions.put("responseValidateFail", "Es necesario que revises los campos que están resaltados en color rojo, para poder enviar los datos.");
+        scrappOptions.put("captchaError", "captcha_error");
+        scrappOptions.put("emailSubjectFirst", "Revolico - ID del Anuncio: ");
+        scrappOptions.put("emailSubjectLast", "Datos de modificación/eliminación");
+        scrappOptions.put("emailFolder", settings.getEmail().getEmailFolder());
+        scrappOptions.put("deleteEmail", settings.getEmail().getDeleteEmail().toString());
+        scrappOptions.put("insertEveryDay", settings.getEmail().getInsertEveryDay().toString());
+        scrappOptions.put("shot", settings.getService().getShot().toString());
+        return scrappOptions;
+    }
+    
+    private CaptchaService createService(ConnectionConfig config) throws IOException{
+        Map<String, String> options = new HashMap();
+        Integer time = Integer.parseInt(settings.getService().getWaitingTime()) * 60 * 1000;
+        options.put("timeout", time.toString()); // wait 10 minutes for the service to complete
+        
+        CaptchaService result;
+        
+        if(settings.getService().getTwoService()){
+            HttpConnection connIn = new HttpConnection(TwoCaptchaService.getUploadURL(),"UTF-8", config);
+            HttpConnection connRes = new HttpConnection(TwoCaptchaService.getResponseUrl(),"UTF-8", config);
+            result = new TwoCaptchaService(settings.getService().getKey(), connIn, connRes, options, config);
+        }
+        else{
+            HttpConnection connIn = new HttpConnection(DeathByCaptchaService.getUploadUrl(),"UTF-8", config);
+            result = new DeathByCaptchaService(settings.getService().getUsername(), settings.getService().getPassword(), connIn, options, config);
+        }
+        return result;
     }
 
     private void setUpDataConfig(){
         ProgressIndicator pi = new ProgressIndicator();
         pi.setVisible(true);
         Task<Void> task = new Task<Void>(){
+            
             @Override
             protected Void call() throws Exception {
                 int total = 6;
@@ -656,7 +696,7 @@ public class FXMLDocumentController implements Initializable {
                 //updateProgress(++done, total);
                 items = advertisement.getAdvertisements(false);
                 //updateProgress(++done, total);
-                RevolicoAutomaticAdsFactory factory = createRevolicoAutomaticAdsFactory();
+                factory = createRevolicoAutomaticAdsFactory();
                 //updateProgress(++done, total);
                 schedulerManager = new SchedulerManager(factory, settings.getService(), connection, injector);
                 //updateProgress(++done, total);
@@ -676,7 +716,7 @@ public class FXMLDocumentController implements Initializable {
                     try {
                         ObservableList<RevolicoAdvertisementModel> advs = advertisement.getAdvertisements(true);
                         ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
-                        Double balance = captchService.balance();
+                        Double balance = settings.getService().getDbcService() ? captchService.balance() / 100 : captchService.balance();
                         Platform.runLater(() -> {
                             System.out.println("Update data in background");
                             updateAdvertisements(advs);
@@ -686,6 +726,7 @@ public class FXMLDocumentController implements Initializable {
                         });
                         Thread.sleep(30000);
                     } catch (SchedulerException | InterruptedException | HttpException | IOException | TwoCaptchaError | SQLException ex) {
+                        Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " at " + new Date()  + " Error actualizando los datos de la aplicación\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
                         Cabot.showExceptionDialog(ex, "Error actualizando los datos de la aplicación");
                     }
                 } 
@@ -775,6 +816,7 @@ public class FXMLDocumentController implements Initializable {
             writeSettings(settings, settings.getAppDirectory() + File.separator + "settings.json");
             schedulerManager.close();
         } catch (SchedulerException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error cerrando el scheduler\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
             Cabot.showExceptionDialog(ex, "Error cerrando el scheduler");
         }
     }
@@ -790,10 +832,13 @@ public class FXMLDocumentController implements Initializable {
             Settings settgs = gson.fromJson(new InputStreamReader(in), Settings.class);
             String originalDirectory = settgs.getAppDirectory();
             String os = System.getProperty("os.name");
+            String phantomjsPath = "phantomjs";
             if(os.startsWith("Windows")){
                 originalDirectory = "\\Documents\\Cabot";
+                phantomjsPath += ".exe";
             }
             String appDirectory = System.getProperty("user.home") + originalDirectory;
+            setUpAppResources(appDirectory, phantomjsPath);
             File file = new File(appDirectory, "settings.json");
             if(file.exists()){
                 settgs = gson.fromJson(new FileReader(file), Settings.class);
@@ -821,6 +866,7 @@ public class FXMLDocumentController implements Initializable {
                 System.exit(0);
             }
         } catch (IOException | GeneralSecurityException ex ) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error iniciando la aplicación\n" + ex.getMessage() + "\nLOG-EXCEPTION");
             showExceptionDialog(ex, "Error iniciando la aplicación");
         }
         
@@ -892,6 +938,7 @@ public class FXMLDocumentController implements Initializable {
             try {
                 Files.copy(source, dest);
             } catch (IOException ex) {
+                Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error buscando las Credenciales\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
                 Cabot.showExceptionDialog(ex, "Error buscando las Credenciales");
             }
         });
@@ -1015,7 +1062,18 @@ public class FXMLDocumentController implements Initializable {
   }
 
     void updateSettings(Settings settings) {
-        this.settings = settings;
+        try {
+            this.settings = settings;
+            ConnectionSetting connSettings = settings.getConnection();
+            ConnectionConfig config = new ConnectionConfig(connSettings.getUseProxy(), connSettings.getProxyHost(), connSettings.getProxyPort(), connSettings.getUseAuthentication(), connSettings.getUserName(), connSettings.getPassword());
+            Map<String, String> scrappOptions = createScrappOptions();
+            captchService = createService(config);
+            factory.setScrappOptions(scrappOptions);
+            factory.setService(captchService);
+        } catch (IOException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error actualizando la configuración\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
+            Cabot.showExceptionDialog(ex, "Error actualizando la configuración");
+        }
     }
 
     private void playAudio() {
@@ -1038,6 +1096,22 @@ public class FXMLDocumentController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.get() == buttonTypeOk;
+    }
+
+    private void setUpAppResources(String appDirectory, String phantomjsPath) throws FileNotFoundException, IOException {
+        File directory = new File(appDirectory);
+        if(!directory.exists()){
+            directory.mkdir();
+            directory.setExecutable(true, true);
+            InputStream source = getClass().getResourceAsStream("/" + phantomjsPath);
+            File dest = new File(appDirectory + File.separator + phantomjsPath);
+            OutputStream outputStream = new FileOutputStream(dest);
+            IOUtils.copy(source, outputStream);
+            outputStream.close();
+            File file = new File(appDirectory + File.separator + phantomjsPath);
+            file.setExecutable(true, true);
+        }
+       
     }
     
 }
