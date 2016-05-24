@@ -306,6 +306,8 @@ public class RevolicoFormController implements Initializable {
         if(!model.getImageA().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_A, model.getImageA());
         if(!model.getImageB().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_B, model.getImageB());
         if(!model.getImageC().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_C, model.getImageC());
+        result.put(RevolicoAutomaticAdsFactory.SEND_FORM, RevolicoAutomaticAdsFactory.SEND_ACTION);
+        result.put(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME, RevolicoAutomaticAdsFactory.FILE_SIZE);
         
         return result;
     }
