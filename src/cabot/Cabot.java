@@ -24,13 +24,11 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.GlyphFontRegistry;
@@ -44,6 +42,13 @@ public class Cabot extends Application {
     
     public void start(Stage stage) throws URISyntaxException, IOException{
         /* Get actual class name to be printed on */
+        
+        // this is to see traffic in fiddler
+        System.setProperty("http.proxyHost", "127.0.0.1");
+        System.setProperty("https.proxyHost", "127.0.0.1");
+        System.setProperty("http.proxyPort", "8888");
+        System.setProperty("https.proxyPort", "8888");
+        
         System.setProperty("logDir", System.getProperty("user.dir") + File.separator + "log4j");
         FXMLLoader fxmlLoader = null;
         try {
@@ -55,6 +60,8 @@ public class Cabot extends Application {
             Parent root = fxmlLoader.load();
             FXMLDocumentController controller = ((FXMLDocumentController)fxmlLoader.getController());
             Scene scene = new Scene(root);
+            //stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon3.png")));
+            stage.setTitle("Cabot Submitter");
             stage.setScene(scene);
             stage.show();
             controller.start(getHostServices());
@@ -63,14 +70,8 @@ public class Cabot extends Application {
             });
             //AeroFX.style();
         } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).fatal("LOG-EXCEPTION\n Error iniciando la aplicación\n" + ex.getMessage() + "\nLOG-EXCEPTION");
             showExceptionDialog(ex, "Error iniciando la aplicación");
-            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n Error iniciando la aplicación\n" + ex.getMessage() + "\nLOG-EXCEPTION");
-//            if(fxmlLoader != null){
-//                 FXMLDocumentController controller = ((FXMLDocumentController)fxmlLoader.getController());
-//                 if(controller != null && controller.getScheduler() != null){
-//                    controller.close();
-//                 }
-//            }
             Platform.exit();        
         }
     }

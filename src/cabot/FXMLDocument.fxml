@@ -58,7 +58,7 @@
                      </AnchorPane>
                </content>
              </Tab>
-             <Tab fx:id="triggerTab" text="Tareas Automáticas">
+             <Tab fx:id="triggerTab" text="Tareas Planificadas">
                <content>
                  <AnchorPane>
                         <children>
@@ -66,7 +66,7 @@
                            <TableView fx:id="triggerTableView" layoutX="2.0" layoutY="2.0" prefHeight="395.0" prefWidth="595.0">
                              <columns>
                                 <TableColumn fx:id="startDateColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Fecha de inicio" />
-                                <TableColumn fx:id="endDateColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Fecha de fin" />
+                                <TableColumn fx:id="endDateColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Fecha final" />
                                 <TableColumn fx:id="stateColumn" maxWidth="-1.0" minWidth="110.0" prefWidth="110.0" text="Estado" />
                                 <TableColumn fx:id="nextFireColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Proxima ejecución" />
                              </columns>
@@ -77,7 +77,7 @@
                                    <content>
                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                           <children>
-                                             <Label fx:id="triggerDescription" alignment="TOP_LEFT" layoutX="14.0" layoutY="14.0" prefHeight="150.0" prefWidth="310.0" wrapText="true" />
+                                             <Label fx:id="triggerDescription" alignment="TOP_LEFT" layoutX="9.0" layoutY="10.0" prefHeight="150.0" prefWidth="280.0" wrapText="true" />
                                           </children>
                                        </AnchorPane>
                                    </content>
@@ -86,7 +86,7 @@
                                    <content>
                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                           <children>
-                                             <Label fx:id="advertisementTitle" alignment="TOP_LEFT" layoutX="14.0" layoutY="14.0" prefHeight="150.0" prefWidth="310.0" wrapText="true" />
+                                             <Label fx:id="advertisementTitle" alignment="TOP_LEFT" layoutX="9.0" layoutY="10.0" prefHeight="150.0" prefWidth="280.0" wrapText="true" />
                                           </children>
                                        </AnchorPane>
                                    </content>
@@ -122,7 +122,7 @@
                </VBox>
                <VBox>
                   <children>
-                     <Label text="Tarea Automática">
+                     <Label text="Tarea Planificada">
                         <VBox.margin>
                            <Insets left="5.0" />
                         </VBox.margin></Label>
@@ -151,12 +151,12 @@
                                  <Font size="18.0" />
                               </font>
                            </Label>
-                           <Label fx:id="balanceLabel" alignment="CENTER" prefHeight="29.0" prefWidth="160.0" wrapText="true">
+                           <Label fx:id="balanceLabel" prefHeight="29.0" prefWidth="160.0" wrapText="true">
                               <font>
                                  <Font size="24.0" />
                               </font>
                               <HBox.margin>
-                                 <Insets top="10.0" />
+                                 <Insets left="10.0" top="10.0" />
                               </HBox.margin>
                            </Label>
                         </children>
@@ -174,13 +174,16 @@
                                  <Insets />
                               </HBox.margin>
                            </Label>
-                           <Label fx:id="publishedLabel" alignment="CENTER" prefHeight="18.0" prefWidth="193.0">
+                           <Label fx:id="publishedLabel" prefHeight="18.0" prefWidth="193.0">
                               <font>
                                  <Font size="14.0" />
                               </font>
                               <HBox.margin>
                                  <Insets />
                               </HBox.margin>
+                              <padding>
+                                 <Insets left="10.0" />
+                              </padding>
                            </Label>
                         </children>
                      </HBox>
