@@ -130,7 +130,6 @@ public class RevolicoJob implements Job{
                 inputs.put(RevolicoAutomaticAdsFactory.SEND_FORM, dataMap.getString(RevolicoAutomaticAdsFactory.SEND_FORM));
                 order.add(RevolicoAutomaticAdsFactory.SEND_FORM);
                 //dropdowns.put(RevolicoAutomaticAdsFactory.CATEGORY, dataMap.getString(RevolicoAutomaticAdsFactory.CATEGORY));
-                
                 System.out.println("Running job to insert advertisement: " + dropdowns + inputs + (new Date()).toString());
                 Object lastTimeInserted = dataMap.get(LAST_TIME_INSERTED);
                 if(lastTimeInserted == null || canBeInserted(lastTimeInserted)){
@@ -155,24 +154,24 @@ public class RevolicoJob implements Job{
                 }
                 else{
                     String key;
-                    if(!dataMap.containsKey(ADVERTISEMENT_KEY)){
+                    if(!dataMap.containsKey(ADVERTISEMENT_KEY) || dataMap.getString(ADVERTISEMENT_KEY) == null){
                         String url = dataMap.getString(ADVERTISEMENT_URL);
                         key = getKey(url, inputs.get(RevolicoAutomaticAdsFactory.HEADLINE));
-                        dataMap.put(ADVERTISEMENT_KEY, key);
+                        if(key != null){
+                            dataMap.put(ADVERTISEMENT_KEY, key);
+                        }else{
+                            Cabot.showWarningDialog("No se ha podido encontrar el correo de notificación de este anuncio.", "Verifique que esté en su bandeja de entrada y no en SPAM. "
+                                + "Otras posibles causas pueden ser que el anuncio tenga un título igual (según las reglas del sitio) a otro previamente insertado o que no se encuentra en la carpeta"
+                                + "especificada en la configuración.");
+                        }
                     }
                     else{
                         key = dataMap.getString(ADVERTISEMENT_KEY);
-                    }
-                    if(key != null){
                         Advertisement ad = new Advertisement(inputs, order);
                         Result r = service.update(ad, key);
                         if(r == Result.Success){
                             factory.updateAdvertisementPublished(Integer.parseInt(dataMap.getString("ID")));
                         }
-                    }else{
-                        Cabot.showWarningDialog("No se ha podido encontrar el correo de notificación de este anuncio.", "Verifique que esté en su bandeja de entrada y no en SPAM. "
-                                + "Otras posibles causas pueden ser que el anuncio tenga un título igual (según las reglas del sitio) a otro previamente insertado o que no se encuentra en la carpeta"
-                                + "especificada en la configuración.");
                     }
                 }
                 
