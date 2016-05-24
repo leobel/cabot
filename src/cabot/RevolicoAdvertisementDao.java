@@ -6,6 +6,7 @@
 package cabot;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -87,15 +88,23 @@ public class RevolicoAdvertisementDao {
     }
 
     Integer add(RevolicoAdvertisementModel model) throws SQLException {
+        Integer id;
         Statement exec = connection.createStatement();
-        String sqlInsert = String.format("INSERT INTO ADVERTISEMENT "
-              + "(TITLE,CATEGORY,EMAIL,NAME,DESCRIPTION,EMAIL_ENABLED,PHONE,PRICE) VALUES('%s','%s','%s','%s','%s','%s','%s','%s')", 
-                model.getTitle(), model.getCategory(), model.getEmail(), model.getName(), model.getDescription(), model.getEmailEnabled(), model.getPhone(), model.getPrice());
-        exec.executeUpdate(sqlInsert);
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO ADVERTISEMENT "
+                        + "(TITLE,CATEGORY,EMAIL,NAME,DESCRIPTION,EMAIL_ENABLED,PHONE,PRICE) VALUES(?,?,?,?,?,?,?,?)");
+        ps.setString(1, model.getTitle());
+        ps.setString(2, model.getCategory());
+        ps.setString(3, model.getEmail());
+        ps.setString(4, model.getName());
+        ps.setString(5, model.getDescription());
+        ps.setString(6, model.getEmailEnabled());
+        ps.setString(7, model.getPhone());
+        ps.setString(8, model.getPrice());
+        ps.executeUpdate();
         String sqlId = "SELECT * FROM ADVERTISEMENT ORDER BY ID DESC LIMIT 1";
         ResultSet r = exec.executeQuery(sqlId);
         r.first();// set teh cursor at the first row;
-        Integer id = r.getInt(1);
+        id = r.getInt(1);
         String[] images = new String[]{ model.getImageA(), model.getImageB(), model.getImageC()};
         for (String image : images) {
             if(!image.isEmpty()){
@@ -103,7 +112,9 @@ public class RevolicoAdvertisementDao {
                 exec.executeUpdate(sqlImageInsert);
             }
         }
+        ps.close();
         exec.close();
+        
         model.setId(id);
         advertisements.add(model);
         return id;
