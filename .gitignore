@@ -15,11 +15,9 @@ nb-configuration.xml
 *.war
 *.ear
 
-# Web driver #
+# Web driver
 phantomjs*
 
-# Log #
+# Log
 log4j/
-
 *.log
-*.out

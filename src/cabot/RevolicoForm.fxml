@@ -26,9 +26,9 @@
          <content>
             <GridPane hgap="5.0" vgap="5.0">
               <columnConstraints>
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="80.0" prefWidth="80.0" />
                 <ColumnConstraints hgrow="ALWAYS" minWidth="50.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="80.0" prefWidth="80.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="60.0" />
                   <ColumnConstraints hgrow="ALWAYS" minWidth="50.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
@@ -86,7 +86,7 @@
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Categoría" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                  <Label text="Categoria" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
@@ -94,7 +94,7 @@
                         <Insets left="5.0" />
                      </padding>
                   </Label>
-                  <ComboBox fx:id="category" prefWidth="300.0" promptText="Seleccione una Categoría" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
+                  <ComboBox fx:id="category" prefWidth="200.0" promptText="Seleccione una categoria" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
@@ -129,14 +129,14 @@
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label fx:id="labelImageA" prefHeight="17.0" prefWidth="380.0" text="No se ha seleccionado ningun archivo." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.rowIndex="10" />
+                  <Label fx:id="labelImageA" prefHeight="17.0" prefWidth="233.0" text="No se ha seleccionado ningun archivo." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="10" />
                   <Button fx:id="imageB" mnemonicParsing="false" onAction="#chooseImageB" text="Examinar..." GridPane.halignment="LEFT" GridPane.rowIndex="11">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label fx:id="labelImageB" prefHeight="17.0" prefWidth="380.0" text="No se ha seleccionado ningun archivo." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="11" />
-                  <Label fx:id="labelImageC" prefHeight="17.0" prefWidth="380.0" text="No se ha seleccionado ningun archivo." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="12" />
+                  <Label fx:id="labelImageB" prefHeight="17.0" prefWidth="233.0" text="No se ha seleccionado ningun archivo." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="11" />
+                  <Label fx:id="labelImageC" prefHeight="17.0" prefWidth="233.0" text="No se ha seleccionado ningun archivo." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="12" />
                   <Button fx:id="imageC" mnemonicParsing="false" onAction="#chooseImageC" text="Examinar..." GridPane.halignment="LEFT" GridPane.rowIndex="12">
                      <GridPane.margin>
                         <Insets left="5.0" />
@@ -194,17 +194,17 @@
                   </TextField>
                   <Button mnemonicParsing="false" onAction="#save" text="Guardar" GridPane.columnSpan="2" GridPane.rowIndex="22" />
                   <Button fx:id="cancel" mnemonicParsing="false" onAction="#cancel" text="Cancelar" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="22" />
-                  <Button fx:id="cancelImageA" cancelButton="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#disableImageA" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 90;" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="10">
+                  <Button fx:id="cancelImageA" cancelButton="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#disableImageA" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 90;" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="10">
                       <graphic>
                           <Glyph fx:id="iconImageA" fontFamily="FontAwesome" icon="REMOVE" />
                       </graphic>
                   </Button>
-                  <Button fx:id="cancelImageB" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#disableImageB" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 90;" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="11">
+                  <Button fx:id="cancelImageB" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#disableImageB" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 90;" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="11">
                       <graphic>
                           <Glyph fx:id="iconImageB" fontFamily="FontAwesome" icon="REMOVE" />
                       </graphic>
                   </Button>
-                  <Button fx:id="cancelImageC" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#disableImageC" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 90;" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="12">
+                  <Button fx:id="cancelImageC" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#disableImageC" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 90;" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="12">
                       <graphic>
                           <Glyph fx:id="iconImageC" fontFamily="FontAwesome" icon="REMOVE" />
                       </graphic>
