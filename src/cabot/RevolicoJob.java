@@ -159,6 +159,11 @@ public class RevolicoJob implements Job{
                         key = getKey(url, inputs.get(RevolicoAutomaticAdsFactory.HEADLINE));
                         if(key != null){
                             dataMap.put(ADVERTISEMENT_KEY, key);
+                            Advertisement ad = new Advertisement(inputs, order);
+                            Result r = service.update(ad, key);
+                            if(r == Result.Success){
+                                factory.updateAdvertisementPublished(Integer.parseInt(dataMap.getString("ID")));
+                            }
                         }else{
                             Cabot.showWarningDialog("No se ha podido encontrar el correo de notificación de este anuncio.", "Verifique que esté en su bandeja de entrada y no en SPAM. "
                                 + "Otras posibles causas pueden ser que el anuncio tenga un título igual (según las reglas del sitio) a otro previamente insertado o que no se encuentra en la carpeta"
@@ -263,7 +268,7 @@ public class RevolicoJob implements Job{
         String id= idMatcher.group(1);
         String subjectFirst= factory.getScrappyOptionsValue("emailSubjectFirst");
         String subjectLast = factory.getScrappyOptionsValue("emailSubjectLast");
-        String query = "in:"+ factory.getScrappyOptionsValue("emailFolder") + " AND " + "subject:+" + subjectFirst + " " + id + " - " + title + " - " + subjectLast;
+        String query = "in:"+ factory.getScrappyOptionsValue("emailFolder") + " AND " + "subject:+" + subjectFirst + " " + id + " - " + "*" + " - " + subjectLast;
         String key = null;
         int attemps = 0;
         while(key == null && attemps < 12){

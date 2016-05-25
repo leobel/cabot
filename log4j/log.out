@@ -8768,4 +8768,72 @@ No se ha podido encontrar el correo de notificación de este anuncio.
 Verifique que esté en su bandeja de entrada y no en SPAM. Otras posibles causas pueden ser que el anuncio tenga un título igual (según las reglas del sitio) a otro previamente insertado o que no se encuentra en la carpetaespecificada en la configuración.
 LOG-WARN-DIALOG
 >>>>>>> Stashed changes
+<<<<<<< HEAD
+>>>>>>> publish_advertisement
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> publish_advertisement
+MLog clients using log4j logging.
+Initializing c3p0-0.9.1.1 [built 15-March-2007 01:32:31; debug? true; trace: 10]
+Using default implementation for ThreadExecutor
+Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+Quartz Scheduler v.2.2.2 created.
+Using thread monitor-based data access locking (synchronization).
+JobStoreTX initialized.
+Scheduler meta-data: Quartz Scheduler (v2.2.2) 'MyScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 15 threads.
+  Using job-store 'org.quartz.impl.jdbcjobstore.JobStoreTX' - which supports persistence. and is not clustered.
+
+Quartz scheduler 'MyScheduler' initialized from an externally provided properties instance.
+Quartz scheduler version: 2.2.2
+JobFactory set to: cabot.GuiceJobFactory@7345118d
+Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hge1569g1rl13tif05gv7|6755083c, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> org.h2.Driver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hge1569g1rl13tif05gv7|6755083c, idleConnectionTestPeriod -> 0, initialPoolSize -> 3, jdbcUrl -> jdbc:h2:/Users/leobel/Library/Application Support/Cabot-1/cabot, lastAcquisitionFailureDefaultUser -> null, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 30, maxStatements -> 0, maxStatementsPerConnection -> 120, minPoolSize -> 1, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ]
+Freed 0 triggers from 'acquired' / 'blocked' state.
+Recovering 0 jobs that were in-progress at the time of the last shut-down.
+Recovery complete.
+Removed 0 'complete' triggers.
+Removed 0 stale fired job entries.
+Scheduler MyScheduler_$_NON_CLUSTERED started.
+LOG-WARN-DIALOG at Tue May 24 19:49:32 CDT 2016
+No se ha podido encontrar el correo de notificación de este anuncio.
+Verifique que esté en su bandeja de entrada y no en SPAM. Otras posibles causas pueden ser que el anuncio tenga un título igual (según las reglas del sitio) a otro previamente insertado o que no se encuentra en la carpetaespecificada en la configuración.
+LOG-WARN-DIALOG
+LOG-WARN-DIALOG at Tue May 24 19:55:01 CDT 2016
+No se ha podido encontrar el correo de notificación de este anuncio.
+Verifique que esté en su bandeja de entrada y no en SPAM. Otras posibles causas pueden ser que el anuncio tenga un título igual (según las reglas del sitio) a otro previamente insertado o que no se encuentra en la carpetaespecificada en la configuración.
+LOG-WARN-DIALOG
+Scheduler MyScheduler_$_NON_CLUSTERED shutting down.
+Scheduler MyScheduler_$_NON_CLUSTERED paused.
+Scheduler MyScheduler_$_NON_CLUSTERED shutdown complete.
+MLog clients using log4j logging.
+Initializing c3p0-0.9.1.1 [built 15-March-2007 01:32:31; debug? true; trace: 10]
+Using default implementation for ThreadExecutor
+Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+Quartz Scheduler v.2.2.2 created.
+Using thread monitor-based data access locking (synchronization).
+JobStoreTX initialized.
+Scheduler meta-data: Quartz Scheduler (v2.2.2) 'MyScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 15 threads.
+  Using job-store 'org.quartz.impl.jdbcjobstore.JobStoreTX' - which supports persistence. and is not clustered.
+
+Quartz scheduler 'MyScheduler' initialized from an externally provided properties instance.
+Quartz scheduler version: 2.2.2
+JobFactory set to: cabot.GuiceJobFactory@50a8beeb
+Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hge1569g1rlex401vrztsl|6755083c, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> org.h2.Driver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hge1569g1rlex401vrztsl|6755083c, idleConnectionTestPeriod -> 0, initialPoolSize -> 3, jdbcUrl -> jdbc:h2:/Users/leobel/Library/Application Support/Cabot-1/cabot, lastAcquisitionFailureDefaultUser -> null, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 30, maxStatements -> 0, maxStatementsPerConnection -> 120, minPoolSize -> 1, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ]
+Freed 0 triggers from 'acquired' / 'blocked' state.
+Recovering 0 jobs that were in-progress at the time of the last shut-down.
+Recovery complete.
+Removed 0 'complete' triggers.
+Removed 0 stale fired job entries.
+Scheduler MyScheduler_$_NON_CLUSTERED started.
+>>>>>>> Stashed changes
 >>>>>>> publish_advertisement
