@@ -728,7 +728,7 @@ public class FXMLDocumentController implements Initializable {
                         }
                         else{
                             Platform.runLater(() -> {
-                                balanceLabel.setText("need key");
+                                balanceLabel.setText("key needed");
                             });
                         }
                     } catch (SchedulerException |  HttpException | IOException | TwoCaptchaError | SQLException ex) {
