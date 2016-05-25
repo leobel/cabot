@@ -8837,3 +8837,39 @@ Removed 0 stale fired job entries.
 Scheduler MyScheduler_$_NON_CLUSTERED started.
 >>>>>>> Stashed changes
 >>>>>>> publish_advertisement
+MLog clients using log4j logging.
+Initializing c3p0-0.9.1.1 [built 15-March-2007 01:32:31; debug? true; trace: 10]
+Using default implementation for ThreadExecutor
+Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+Quartz Scheduler v.2.2.2 created.
+Using thread monitor-based data access locking (synchronization).
+JobStoreTX initialized.
+Scheduler meta-data: Quartz Scheduler (v2.2.2) 'MyScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 15 threads.
+  Using job-store 'org.quartz.impl.jdbcjobstore.JobStoreTX' - which supports persistence. and is not clustered.
+
+Quartz scheduler 'MyScheduler' initialized from an externally provided properties instance.
+Quartz scheduler version: 2.2.2
+JobFactory set to: cabot.GuiceJobFactory@2c2acb67
+Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hge1569g1rlp86b8md9h0|5b61f85c, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> org.h2.Driver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hge1569g1rlp86b8md9h0|5b61f85c, idleConnectionTestPeriod -> 0, initialPoolSize -> 3, jdbcUrl -> jdbc:h2:/Users/leobel/Library/Application Support/Cabot-1/cabot, lastAcquisitionFailureDefaultUser -> null, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 30, maxStatements -> 0, maxStatementsPerConnection -> 120, minPoolSize -> 1, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ]
+Freed 0 triggers from 'acquired' / 'blocked' state.
+Handling 1 trigger(s) that missed their scheduled fire-time.
+Recovering 0 jobs that were in-progress at the time of the last shut-down.
+Recovery complete.
+Removed 0 'complete' triggers.
+Removed 0 stale fired job entries.
+Scheduler MyScheduler_$_NON_CLUSTERED started.
+LOG-INFO-NOTIFICATION at Tue May 24 20:06:22 CDT 2016
+ El anuncio esta siendo enviado
+LOG-INFO-NOTIFICATION
+LOG-INSERT-NOTIFICATION at Tue May 24 20:07:14 CDT 2016
+ Anuncio publicado
+http://negdesign.ddns.net/computadoras/laptop/oferta-se-vende-ipad-3g-64gb-simcard-15440212.html
+LOG-INSERT-NOTIFICATION
+Scheduler MyScheduler_$_NON_CLUSTERED shutting down.
+Scheduler MyScheduler_$_NON_CLUSTERED paused.
+Scheduler MyScheduler_$_NON_CLUSTERED shutdown complete.
