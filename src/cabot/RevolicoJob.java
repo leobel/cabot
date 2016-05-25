@@ -11,12 +11,13 @@ import com.google.api.services.gmail.model.Message;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.http.HttpException;
@@ -91,49 +92,23 @@ public class RevolicoJob implements Job{
             }
             else{
                 Map<String, String> dropdowns = new HashMap<>();
-                Map<String, String> inputs = new LinkedHashMap<>();
-                List<String> order = new ArrayList<>();
+                Map<String, String> inputs = new HashMap<>();
                 inputs.put(RevolicoAutomaticAdsFactory.PRICE, dataMap.getString(RevolicoAutomaticAdsFactory.PRICE));
-                order.add(RevolicoAutomaticAdsFactory.PRICE);
-                inputs.put(RevolicoAutomaticAdsFactory.CATEGORY, dataMap.getString(RevolicoAutomaticAdsFactory.CATEGORY));
-                order.add(RevolicoAutomaticAdsFactory.CATEGORY);
                 inputs.put(RevolicoAutomaticAdsFactory.HEADLINE, dataMap.getString(RevolicoAutomaticAdsFactory.HEADLINE));
-                order.add(RevolicoAutomaticAdsFactory.HEADLINE);
                 inputs.put(RevolicoAutomaticAdsFactory.TEXT, dataMap.getString(RevolicoAutomaticAdsFactory.TEXT));
-                order.add(RevolicoAutomaticAdsFactory.TEXT);
-                inputs.put(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME, dataMap.getString(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME));
-                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_A) != null) {
-                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_A, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_A));
-                    order.add(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME);
-                    order.add(RevolicoAutomaticAdsFactory.PICTURE_A);
-                }
-                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_B) != null) {
-                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_B, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_B));
-                    order.add(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME);
-                    order.add(RevolicoAutomaticAdsFactory.PICTURE_B);
-                }
-                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_C) != null) {
-                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_C, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_C));
-                    order.add(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME);
-                    order.add(RevolicoAutomaticAdsFactory.PICTURE_C);
-                }
                 inputs.put(RevolicoAutomaticAdsFactory.EMAIL, dataMap.getString(RevolicoAutomaticAdsFactory.EMAIL));
-                order.add(RevolicoAutomaticAdsFactory.EMAIL);
-                inputs.put(RevolicoAutomaticAdsFactory.EMAIL_ENABLED, dataMap.getString(RevolicoAutomaticAdsFactory.EMAIL_ENABLED));
-                order.add(RevolicoAutomaticAdsFactory.EMAIL_ENABLED);
                 inputs.put(RevolicoAutomaticAdsFactory.NAME, dataMap.getString(RevolicoAutomaticAdsFactory.NAME));
-                order.add(RevolicoAutomaticAdsFactory.NAME);
                 inputs.put(RevolicoAutomaticAdsFactory.PHONE, dataMap.getString(RevolicoAutomaticAdsFactory.PHONE));
-                order.add(RevolicoAutomaticAdsFactory.PHONE);
-                order.add(RevolicoAutomaticAdsFactory.RECAPTCHA_CHALLENGE_FIELD);
-                order.add(RevolicoAutomaticAdsFactory.RECAPTCHA_RESPONSE_FIELD);
-                inputs.put(RevolicoAutomaticAdsFactory.SEND_FORM, dataMap.getString(RevolicoAutomaticAdsFactory.SEND_FORM));
-                order.add(RevolicoAutomaticAdsFactory.SEND_FORM);
-                //dropdowns.put(RevolicoAutomaticAdsFactory.CATEGORY, dataMap.getString(RevolicoAutomaticAdsFactory.CATEGORY));
+                inputs.put(RevolicoAutomaticAdsFactory.EMAIL_ENABLED, dataMap.getString(RevolicoAutomaticAdsFactory.EMAIL_ENABLED));
+                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_A) != null) inputs.put(RevolicoAutomaticAdsFactory.PICTURE_A, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_A));
+                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_B) != null) inputs.put(RevolicoAutomaticAdsFactory.PICTURE_B, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_B));
+                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_C) != null) inputs.put(RevolicoAutomaticAdsFactory.PICTURE_C, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_C));
+                dropdowns.put(RevolicoAutomaticAdsFactory.CATEGORY, dataMap.getString(RevolicoAutomaticAdsFactory.CATEGORY));
+
                 System.out.println("Running job to insert advertisement: " + dropdowns + inputs + (new Date()).toString());
                 Object lastTimeInserted = dataMap.get(LAST_TIME_INSERTED);
                 if(lastTimeInserted == null || canBeInserted(lastTimeInserted)){
-                    Advertisement ad = new Advertisement(inputs, order);
+                    Advertisement ad = new Advertisement(inputs, dropdowns);
                     Holder<String> link = Holder.of("");
                     dataMap.remove(ADVERTISEMENT_URL); // now use the new inserted advertisement
                     dataMap.remove(ADVERTISEMENT_KEY); // now use the new inserted advertisement
@@ -154,29 +129,21 @@ public class RevolicoJob implements Job{
                 }
                 else{
                     String key;
-                    if(!dataMap.containsKey(ADVERTISEMENT_KEY) || dataMap.getString(ADVERTISEMENT_KEY) == null){
+                    if(!dataMap.containsKey(ADVERTISEMENT_KEY)){
                         String url = dataMap.getString(ADVERTISEMENT_URL);
                         key = getKey(url, inputs.get(RevolicoAutomaticAdsFactory.HEADLINE));
-                        if(key != null){
-                            dataMap.put(ADVERTISEMENT_KEY, key);
-                            Advertisement ad = new Advertisement(inputs, order);
-                            Result r = service.update(ad, key);
-                            if(r == Result.Success){
-                                factory.updateAdvertisementPublished(Integer.parseInt(dataMap.getString("ID")));
-                            }
-                        }else{
-                            Cabot.showWarningDialog("No se ha podido encontrar el correo de notificación de este anuncio.", "Verifique que esté en su bandeja de entrada y no en SPAM. "
-                                + "Otras posibles causas pueden ser que el anuncio tenga un título igual (según las reglas del sitio) a otro previamente insertado o que no se encuentra en la carpeta"
-                                + "especificada en la configuración.");
-                        }
+                        dataMap.put(ADVERTISEMENT_KEY, key);
                     }
                     else{
                         key = dataMap.getString(ADVERTISEMENT_KEY);
-                        Advertisement ad = new Advertisement(inputs, order);
+                    }
+                    if(key != null){
+                        Advertisement ad = new Advertisement(); // not need to set any input, because all are set already.
                         Result r = service.update(ad, key);
-                        if(r == Result.Success){
-                            factory.updateAdvertisementPublished(Integer.parseInt(dataMap.getString("ID")));
-                        }
+                    }else{
+                        Cabot.showWarningDialog("No se ha podido encontrar el correo de notificación de este anuncio.", "Verifique que esté en su bandeja de entrada y no en SPAM. "
+                                + "Otras posibles causas pueden ser que el anuncio tenga un título igual (según las reglas del sitio) a otro previamente insertado o que no se encuentra en la carpeta"
+                                + "especificada en la configuración.");
                     }
                 }
                 
@@ -195,7 +162,7 @@ public class RevolicoJob implements Job{
             if(ex instanceof CaptchaUnsolvable){
                 Cabot.showWarningDialog("El captcha no pudo ser resuelto por el servicio", "Este captcha no afecta el balance :)");
             }
-            if(ex instanceof ImageTypeNotSupported || ex instanceof DBCBadRequest){
+            if(ex instanceof ImageTypeNotSupported){
                 Cabot.showWarningDialog("El servicio no pudo reconocer el tipo de fichero del captcha", "Este captcha no afecta el balance :)");
             }
             if(ex instanceof NotSlotAvailable){
@@ -207,18 +174,6 @@ public class RevolicoJob implements Job{
             if(ex instanceof ZeroCaptchaFileSize){
                 Cabot.showWarningDialog("El tamaño del captcha es menor que 100 Bites", "Este captcha no afecta el balance :)");
             }
-            if(ex instanceof DBCUnavailable){
-                Cabot.showWarningDialog("El servicio está sobrecargado", "Esto ocurre usualmente de 3:00 a 6:00 PM hora EST. Considere suspender el servicio temporalmente si continua mostrándose esta advertencia");
-            }
-            if(ex instanceof WrongIdFormat || ex instanceof DBCNotFound){
-                Cabot.showWarningDialog("El identificador del Captcha es incorrecto", "Contacte a su proveedor en caso de que esta advertencia continue apareciendo.");
-            }
-            if(ex instanceof DBCInternalServerError){
-                settings.setStatus("Error en el servidor del servicio");
-                settings.setStatusDetails("El servidor está fallando al procesar tus pedidos, es probable que sea un error en el servicio que está utilizando. Contacte a su proveedor para más información.");
-                Cabot.showWarningDialog("El servicio está temporalmente suspendido.",
-                        settings.getStatusDetails());
-            }
             if(ex instanceof WrongUserKey || ex instanceof KeyDoesNotExist){
                 settings.setStatus("La llave del servicio (no existe o es incorrecta)");
                 settings.setStatusDetails("La llave que está utilizando no es correcta. Verifique en la configuración de la llave sea la correcta. Contacte a su proveedor para más información.");
@@ -228,12 +183,6 @@ public class RevolicoJob implements Job{
             else if(ex instanceof ZeroBalance){
                 settings.setStatus("Saldo insuficiente");
                 settings.setStatusDetails("No tiene suficiente saldo para realizar la operación. Contacte a su proveedor para más información.");
-                Cabot.showWarningDialog("El servicio está temporalmente suspendido.", 
-                        settings.getStatusDetails());
-            }
-            else if (ex instanceof DBCForbidden){
-                settings.setStatus("Saldo insuficiente o credenciales rechazadas");
-                settings.setStatusDetails("No tiene suficiente saldo para realizar la operación o sus credenciales fueron rechazadas. Contacte a su proveedor para más información.");
                 Cabot.showWarningDialog("El servicio está temporalmente suspendido.", 
                         settings.getStatusDetails());
             }
@@ -268,7 +217,7 @@ public class RevolicoJob implements Job{
         String id= idMatcher.group(1);
         String subjectFirst= factory.getScrappyOptionsValue("emailSubjectFirst");
         String subjectLast = factory.getScrappyOptionsValue("emailSubjectLast");
-        String query = "in:"+ factory.getScrappyOptionsValue("emailFolder") + " AND " + "subject:+" + subjectFirst + " " + id + " - " + "*" + " - " + subjectLast;
+        String query = "in:"+ factory.getScrappyOptionsValue("emailFolder") + " AND " + "subject:+" + subjectFirst + " " + id + " - " + title + " - " + subjectLast;
         String key = null;
         int attemps = 0;
         while(key == null && attemps < 12){
