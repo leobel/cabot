@@ -638,7 +638,7 @@ public class FXMLDocumentController implements Initializable {
             }
         };
 
-        return new RevolicoAutomaticAdsFactory(advertisement, settings.getAppDirectory(), config, connIn, connRes, options, captchService, captchaOptions, scrappOptions, host, adapter);
+        return new RevolicoAutomaticAdsFactory(advertisement, settings.getAppDirectory(), config, captchService, captchaOptions, scrappOptions, host, adapter);
     }
 
     private void setUpDataConfig(){
