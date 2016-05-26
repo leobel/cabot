@@ -23,7 +23,7 @@
         "deleteEmail": false,
         "insertEveryDay": true
     },
-    "appDirectory": "/Library/Application Support/Cabot-1",
+    "appDirectory": "/Library/Application Support/Cabot",
     "host": "http://negdesign.ddns.net"
 
 }
