@@ -715,20 +715,34 @@ public class FXMLDocumentController implements Initializable {
             public void run() {
                 while(canRunInBackground){
                     try {
-                        ObservableList<RevolicoAdvertisementModel> advs = advertisement.getAdvertisements(true);
-                        ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
-                        Double balance = settings.getService().getDbcService() ? captchService.balance() / 100 : captchService.balance();
-                        Platform.runLater(() -> {
-                            System.out.println("Update data in background");
-                            updateAdvertisements(advs);
-                            updateTriggers(triggs);
-                            balanceLabel.setText(String.format("%f", balance) );
-                            publishedLabel.setText(publishedCount.toString());
-                        });
-                        Thread.sleep(30000);
-                    } catch (SchedulerException | InterruptedException | HttpException | IOException | TwoCaptchaError | SQLException ex) {
-                        Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " at " + new Date()  + " Error actualizando los datos de la aplicación\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
+                        if(!settings.EmptyCredentials()){
+                            ObservableList<RevolicoAdvertisementModel> advs = advertisement.getAdvertisements(true);
+                            ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
+                            Double balance = settings.getService().getDbcService() ? captchService.balance() / 100 : captchService.balance();
+                            Platform.runLater(() -> {
+                                System.out.println("Update data in background");
+                                updateAdvertisements(advs);
+                                updateTriggers(triggs);
+                                balanceLabel.setText(String.format("%f", balance) );
+                                publishedLabel.setText(publishedCount.toString());
+                            });
+                        }
+                        else{
+                            Platform.runLater(() -> {
+                                Logger.getLogger(Cabot.class.getName()).fatal("LOG-WARNING\n at " + new Date() + " Credenciales del servicio vacias\nLOG-WARNING");       
+                                Cabot.showWarningDialog("Credenciales del servicio vacias", "El servicio no tiene credenciales asignadas correctamente, Vaya a Inicio>Configuración>Servicio e incorpore las credenciales que desea utilizar. Contacte a su proveedor para más información.");
+                            });
+                        }
+                    } catch (SchedulerException |  HttpException | IOException | TwoCaptchaError | SQLException ex) {
+                        Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date() + " Error actualizando los datos de la aplicación\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
                         Cabot.showExceptionDialog(ex, "Error actualizando los datos de la aplicación");
+                    }
+                    finally{
+                        try {
+                            Thread.sleep(30000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error sleeping background process\n" + ex.getMessage() + "\nLOG-EXCEPTION");
+                        }
                     }
                 } 
             }

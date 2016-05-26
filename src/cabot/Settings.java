@@ -57,6 +57,10 @@ public class Settings {
         this.appDirectory = dir;
     }
 
+    boolean EmptyCredentials() {
+        return ((service.getTwoService() && service.getKey().isEmpty()) || (service.getDbcService() && (service.getUsername().isEmpty() || service.getPassword().isEmpty()))); 
+    }
+
     public class Service {
         private String waitingTime;
         private String key;
