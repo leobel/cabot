@@ -81,11 +81,11 @@ public class RevolicoJob implements Job{
     public void execute(JobExecutionContext context) throws JobExecutionException {
         try {
             dataMap = context.getJobDetail().getJobDataMap();
-            
+            Map<String, String> adData = factory.getAdvertisement(dataMap.getString("ID"));
              // check for business rules
             if(!settings.getStatus().equals("Ok")){
                 System.out.println("Service is suspended until you fix the problem :(");
-                System.out.println("See datails: " + settings.getStatusDetails());
+                System.out.println("See details: " + settings.getStatusDetails());
                 Cabot.showWarningDialog("El servicio está temporalmente suspendido.",
                         "Detalles:\n" + settings.getStatusDetails());
             }
@@ -93,43 +93,43 @@ public class RevolicoJob implements Job{
                 Map<String, String> dropdowns = new HashMap<>();
                 Map<String, String> inputs = new LinkedHashMap<>();
                 List<String> order = new ArrayList<>();
-                inputs.put(RevolicoAutomaticAdsFactory.PRICE, dataMap.getString(RevolicoAutomaticAdsFactory.PRICE));
+                inputs.put(RevolicoAutomaticAdsFactory.PRICE, adData.get(RevolicoAutomaticAdsFactory.PRICE));
                 order.add(RevolicoAutomaticAdsFactory.PRICE);
-                inputs.put(RevolicoAutomaticAdsFactory.CATEGORY, dataMap.getString(RevolicoAutomaticAdsFactory.CATEGORY));
+                inputs.put(RevolicoAutomaticAdsFactory.CATEGORY, adData.get(RevolicoAutomaticAdsFactory.CATEGORY));
                 order.add(RevolicoAutomaticAdsFactory.CATEGORY);
-                inputs.put(RevolicoAutomaticAdsFactory.HEADLINE, dataMap.getString(RevolicoAutomaticAdsFactory.HEADLINE));
+                inputs.put(RevolicoAutomaticAdsFactory.HEADLINE, adData.get(RevolicoAutomaticAdsFactory.HEADLINE));
                 order.add(RevolicoAutomaticAdsFactory.HEADLINE);
-                inputs.put(RevolicoAutomaticAdsFactory.TEXT, dataMap.getString(RevolicoAutomaticAdsFactory.TEXT));
+                inputs.put(RevolicoAutomaticAdsFactory.TEXT, adData.get(RevolicoAutomaticAdsFactory.TEXT));
                 order.add(RevolicoAutomaticAdsFactory.TEXT);
-                inputs.put(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME, dataMap.getString(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME));
-                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_A) != null) {
-                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_A, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_A));
+                inputs.put(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME, adData.get(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME));
+                if(adData.get(RevolicoAutomaticAdsFactory.PICTURE_A) != null) {
+                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_A, adData.get(RevolicoAutomaticAdsFactory.PICTURE_A));
                     order.add(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME);
                     order.add(RevolicoAutomaticAdsFactory.PICTURE_A);
                 }
-                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_B) != null) {
-                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_B, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_B));
+                if(adData.get(RevolicoAutomaticAdsFactory.PICTURE_B) != null) {
+                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_B, adData.get(RevolicoAutomaticAdsFactory.PICTURE_B));
                     order.add(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME);
                     order.add(RevolicoAutomaticAdsFactory.PICTURE_B);
                 }
-                if(dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_C) != null) {
-                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_C, dataMap.getString(RevolicoAutomaticAdsFactory.PICTURE_C));
+                if(adData.get(RevolicoAutomaticAdsFactory.PICTURE_C) != null) {
+                    inputs.put(RevolicoAutomaticAdsFactory.PICTURE_C, adData.get(RevolicoAutomaticAdsFactory.PICTURE_C));
                     order.add(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME);
                     order.add(RevolicoAutomaticAdsFactory.PICTURE_C);
                 }
-                inputs.put(RevolicoAutomaticAdsFactory.EMAIL, dataMap.getString(RevolicoAutomaticAdsFactory.EMAIL));
+                inputs.put(RevolicoAutomaticAdsFactory.EMAIL, adData.get(RevolicoAutomaticAdsFactory.EMAIL));
                 order.add(RevolicoAutomaticAdsFactory.EMAIL);
-                inputs.put(RevolicoAutomaticAdsFactory.EMAIL_ENABLED, dataMap.getString(RevolicoAutomaticAdsFactory.EMAIL_ENABLED));
+                inputs.put(RevolicoAutomaticAdsFactory.EMAIL_ENABLED, adData.get(RevolicoAutomaticAdsFactory.EMAIL_ENABLED));
                 order.add(RevolicoAutomaticAdsFactory.EMAIL_ENABLED);
-                inputs.put(RevolicoAutomaticAdsFactory.NAME, dataMap.getString(RevolicoAutomaticAdsFactory.NAME));
+                inputs.put(RevolicoAutomaticAdsFactory.NAME, adData.get(RevolicoAutomaticAdsFactory.NAME));
                 order.add(RevolicoAutomaticAdsFactory.NAME);
-                inputs.put(RevolicoAutomaticAdsFactory.PHONE, dataMap.getString(RevolicoAutomaticAdsFactory.PHONE));
+                inputs.put(RevolicoAutomaticAdsFactory.PHONE, adData.get(RevolicoAutomaticAdsFactory.PHONE));
                 order.add(RevolicoAutomaticAdsFactory.PHONE);
                 order.add(RevolicoAutomaticAdsFactory.RECAPTCHA_CHALLENGE_FIELD);
                 order.add(RevolicoAutomaticAdsFactory.RECAPTCHA_RESPONSE_FIELD);
-                inputs.put(RevolicoAutomaticAdsFactory.SEND_FORM, dataMap.getString(RevolicoAutomaticAdsFactory.SEND_FORM));
+                inputs.put(RevolicoAutomaticAdsFactory.SEND_FORM, adData.get(RevolicoAutomaticAdsFactory.SEND_FORM));
                 order.add(RevolicoAutomaticAdsFactory.SEND_FORM);
-                //dropdowns.put(RevolicoAutomaticAdsFactory.CATEGORY, dataMap.getString(RevolicoAutomaticAdsFactory.CATEGORY));
+                //dropdowns.put(RevolicoAutomaticAdsFactory.CATEGORY, adData.get(RevolicoAutomaticAdsFactory.CATEGORY));
                 System.out.println("Running job to insert advertisement: " + dropdowns + inputs + (new Date()).toString());
                 Object lastTimeInserted = dataMap.get(LAST_TIME_INSERTED);
                 if(lastTimeInserted == null || canBeInserted(lastTimeInserted)){
@@ -139,7 +139,7 @@ public class RevolicoJob implements Job{
                     dataMap.remove(ADVERTISEMENT_KEY); // now use the new inserted advertisement
                     Result r = service.insert(ad, link);
                     if(r == Result.Success){
-                        factory.updateAdvertisementPublished(Integer.parseInt(dataMap.getString("ID")));
+                        factory.updateAdvertisementPublished(Integer.parseInt(adData.get("ID")));
                         dataMap.put(LAST_TIME_INSERTED, System.currentTimeMillis());
                         dataMap.put(ADVERTISEMENT_URL, link.getValue());
                         String key = getKey(link.getValue(), inputs.get(RevolicoAutomaticAdsFactory.HEADLINE));
@@ -162,7 +162,7 @@ public class RevolicoJob implements Job{
                             Advertisement ad = new Advertisement(inputs, order);
                             Result r = service.update(ad, key);
                             if(r == Result.Success){
-                                factory.updateAdvertisementPublished(Integer.parseInt(dataMap.getString("ID")));
+                                factory.updateAdvertisementPublished(Integer.parseInt(adData.get("ID")));
                             }
                         }else{
                             Cabot.showWarningDialog("No se ha podido encontrar el correo de notificación de este anuncio.", "Verifique que esté en su bandeja de entrada y no en SPAM. "
@@ -175,7 +175,7 @@ public class RevolicoJob implements Job{
                         Advertisement ad = new Advertisement(inputs, order);
                         Result r = service.update(ad, key);
                         if(r == Result.Success){
-                            factory.updateAdvertisementPublished(Integer.parseInt(dataMap.getString("ID")));
+                            factory.updateAdvertisementPublished(Integer.parseInt(adData.get("ID")));
                         }
                     }
                 }

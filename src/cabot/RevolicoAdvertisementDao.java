@@ -106,18 +106,55 @@ public class RevolicoAdvertisementDao {
         r.first();// set teh cursor at the first row;
         id = r.getInt(1);
         String[] images = new String[]{ model.getImageA(), model.getImageB(), model.getImageC()};
-        for (String image : images) {
-            if(!image.isEmpty()){
-                String sqlImageInsert = String.format("INSERT INTO IMAGE VALUES ('%d','%s')", id, image);
-                exec.executeUpdate(sqlImageInsert);
-            }
-        }
+        insertImage(id, images);
         ps.close();
         exec.close();
         
         model.setId(id);
         advertisements.add(model);
         return id;
+    }
+    
+    public void updateAdvertisement(RevolicoAdvertisementModel model) throws SQLException {
+        Integer id = model.getId();
+        PreparedStatement ps = connection.prepareStatement("UPDATE ADVERTISEMENT SET"
+                        + "(TITLE,CATEGORY,EMAIL,NAME,DESCRIPTION,EMAIL_ENABLED,PHONE,PRICE) = (?,?,?,?,?,?,?,?) WHERE ID=?");
+        ps.setString(1, model.getTitle());
+        ps.setString(2, model.getCategory());
+        ps.setString(3, model.getEmail());
+        ps.setString(4, model.getName());
+        ps.setString(5, model.getDescription());
+        ps.setString(6, model.getEmailEnabled());
+        ps.setString(7, model.getPhone());
+        ps.setString(8, model.getPrice());
+        ps.setInt(9, model.getId());
+        ps.executeUpdate();
+        ps.close();
+        String[] images = new String[]{ model.getImageA(), model.getImageB(), model.getImageC()};
+        updateImage(id, images);
+    }
+
+    private void insertImage(Integer id, String[] images) throws SQLException {
+        try (Statement exec = connection.createStatement()) {
+            for (String image : images) {
+                //if(!image.isEmpty()){
+                String sqlImageInsert = String.format("INSERT INTO IMAGE (ID, LOCATION) VALUES ('%d','%s')", id, image);
+                exec.executeUpdate(sqlImageInsert);
+                //}
+            }
+        }
+    }
+    
+    private void updateImage(Integer id, String[] images) throws SQLException {
+        try (Statement exec = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE)) {
+            String sql = String.format("SELECT * FROM IMAGE WHERE ID='%d'", id);
+            ResultSet img = exec.executeQuery(sql);
+            int index = 0;
+            while(img.next()){
+                img.updateString("LOCATION", images[index++]);
+                img.updateRow();
+            }
+        }
     }
 
     void addAdvertisementJob(Integer id, String name, String group) throws SQLException {
@@ -156,4 +193,34 @@ public class RevolicoAdvertisementDao {
             Cabot.showExceptionDialog(ex, "Error en la actualización de la cantidad de veces que ha sido piblicado el anuncio");
         }
     }
+
+    RevolicoAdvertisementModel getAdvertisement(Integer id) {
+        RevolicoAdvertisementModel model = null;
+        try(Statement exec = connection.createStatement()){
+            String sql = String.format("SELECT * FROM ADVERTISEMENT WHERE ID='%d'", id);
+            ResultSet advs = exec.executeQuery(sql);
+            advs.first();
+            model = new RevolicoAdvertisementModel(
+                        advs.getInt("ID"),
+                        advs.getString("TITLE"), advs.getString("CATEGORY"), advs.getString("EMAIL"), advs.getInt("PUBLISHED"),
+                        advs.getString("NAME"), advs.getString("DESCRIPTION"), advs.getString("EMAIL_ENABLED"),
+                        advs.getString("PHONE"), advs.getString("PRICE"));
+            String images = String.format("SELECT * FROM IMAGE WHERE ID='%d'", id);
+            ResultSet imgs = exec.executeQuery(images);
+            while(imgs.next()){
+                if(model.getImageA().isEmpty())
+                    model.setImageA(imgs.getString("LOCATION"));
+                else if(model.getImageB().isEmpty())
+                    model.setImageB(imgs.getString("LOCATION"));
+                else
+                    model.setImageC(imgs.getString("LOCATION"));
+            }
+        } catch (SQLException ex){
+            Logger.getLogger(Cabot.class.getName()).error("LOG-EXCEPTION-NOTIFICATION at " + new Date()  + "\n Exception trying to get advertisement from data base\n" + ex.getMessage() + "\nLOG-EXCEPTION-NOTIFICATION");
+            Cabot.showExceptionDialog(ex, "Error obteniendo los datos del anuncio");
+        }
+        return model;
+    }
+
+    
 }

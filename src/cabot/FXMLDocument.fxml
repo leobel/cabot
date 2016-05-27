@@ -20,7 +20,7 @@
 
 <!--<?import org.controlsfx.control.MasterDetailPane?>-->
 
-<VBox prefWidth="900.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cabot.FXMLDocumentController">
+<VBox prefWidth="1200.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cabot.FXMLDocumentController">
    <MenuBar>
      <menus>
        <Menu mnemonicParsing="false" text="Inicio">
@@ -42,16 +42,17 @@
            <tabs>
              <Tab fx:id="advertisementTab" text="Anuncios">
                <content>
-                 <AnchorPane minHeight="0.0" minWidth="0.0">
+                 <AnchorPane>
                         <children>
                               <TableView fx:id="table">
                                   <placeholder>
                                       <Label text="" />
                                   </placeholder>
                                 <columns>
-                                  <TableColumn fx:id="titleColumn" editable="false" maxWidth="-Infinity" minWidth="500.0" prefWidth="500.0" text="Título" />
-                                    <TableColumn fx:id="categoryColumn" editable="false" maxWidth="-Infinity" minWidth="300.0" prefWidth="300.0" text="Categoría" />
-                                 <TableColumn fx:id="publishedColumn" maxWidth="-Infinity" minWidth="100.0" prefWidth="100.0" text="Publicado" />
+                                  <TableColumn fx:id="titleColumn" editable="false" maxWidth="-1.0" minWidth="600.0" prefWidth="-1.0" text="Título" />
+                                 <TableColumn maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Publicar" />
+                                    <TableColumn fx:id="categoryColumn" editable="false" maxWidth="-1.0" minWidth="400.0" prefWidth="-1.0" text="Categoría" />
+                                 <TableColumn fx:id="publishedColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Publicado" />
                                 </columns>
                               </TableView>
                         </children>
@@ -63,30 +64,31 @@
                  <AnchorPane>
                         <children>
                            <!--<MasterDetailPane fx:id="masterDetailPane" dividerPosition="0.7" prefHeight="400.0" prefWidth="800.0" />-->
-                           <TableView fx:id="triggerTableView" layoutX="2.0" layoutY="2.0" prefHeight="395.0" prefWidth="595.0">
+                           <TableView fx:id="triggerTableView" layoutX="2.0" layoutY="2.0">
                              <columns>
-                                <TableColumn fx:id="startDateColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Fecha de inicio" />
-                                <TableColumn fx:id="endDateColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Fecha final" />
-                                <TableColumn fx:id="stateColumn" maxWidth="-1.0" minWidth="110.0" prefWidth="110.0" text="Estado" />
-                                <TableColumn fx:id="nextFireColumn" maxWidth="-1.0" minWidth="160.0" prefWidth="160.0" text="Proxima ejecución" />
+                                <TableColumn fx:id="startDateColumn" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Fecha de inicio" />
+                                <TableColumn fx:id="endDateColumn" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Fecha final" />
+                                <TableColumn fx:id="stateColumn" maxWidth="-1.0" minWidth="110.0" prefWidth="-1.0" text="Estado" />
+                                <TableColumn fx:id="nextFireColumn" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Proxima ejecución" />
+                                 <TableColumn maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Cron Expression" />
                              </columns>
                            </TableView>
-                           <VBox layoutX="598.0" layoutY="2.0" prefHeight="395.0" prefWidth="300.0">
+                           <VBox layoutX="914.0" layoutY="1.0">
                               <children>
                                  <TitledPane animated="false" collapsible="false" text="Descripción">
                                    <content>
-                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                     <AnchorPane>
                                           <children>
-                                             <Label fx:id="triggerDescription" alignment="TOP_LEFT" layoutX="9.0" layoutY="10.0" prefHeight="150.0" prefWidth="280.0" wrapText="true" />
+                                             <Label fx:id="triggerDescription" alignment="TOP_LEFT" layoutX="9.0" layoutY="10.0" minHeight="141.0" minWidth="280.0" wrapText="true" />
                                           </children>
                                        </AnchorPane>
                                    </content>
                                  </TitledPane>
                                  <TitledPane animated="false" collapsible="false" text="Anuncio">
                                    <content>
-                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                     <AnchorPane>
                                           <children>
-                                             <Label fx:id="advertisementTitle" alignment="TOP_LEFT" layoutX="9.0" layoutY="10.0" prefHeight="150.0" prefWidth="280.0" wrapText="true" />
+                                             <Label fx:id="advertisementTitle" alignment="TOP_LEFT" layoutX="9.0" layoutY="10.0" minHeight="142.0" minWidth="280.0" wrapText="true" />
                                           </children>
                                        </AnchorPane>
                                    </content>
@@ -101,7 +103,7 @@
          </TabPane>
       </center>
       <top>
-         <HBox prefHeight="80.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+         <HBox prefHeight="80.0" BorderPane.alignment="CENTER">
             <children>
                <VBox>
                   <children>
@@ -112,6 +114,7 @@
                      <ToolBar style="-fx-background-color: transparent;">
                        <items>
                          <Button fx:id="addAdvertisement" mnemonicParsing="false" onAction="#addAdvertisement" text="Agregar" />
+                           <Button fx:id="editAdvertisement" disable="true" mnemonicParsing="false" onAction="#editAdvertisement" text="Editar" />
                          <Button fx:id="deleteAdvertisement" disable="true" mnemonicParsing="false" onAction="#deleteAdvertisement" text="Eliminar" />
                        </items>
                      </ToolBar>
@@ -139,7 +142,7 @@
                      <Insets left="50.0" />
                   </padding>
                </VBox>
-               <VBox prefHeight="80.0" prefWidth="340.0">
+               <VBox>
                   <children>
                      <HBox alignment="CENTER" prefHeight="60.0">
                         <children>
