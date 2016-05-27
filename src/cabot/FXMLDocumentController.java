@@ -163,6 +163,12 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn titleColumn;
     
     @FXML
+    private TableColumn priceColumn;
+     
+    @FXML
+    private TableColumn allowPublishColumn;
+    
+    @FXML
     private TableColumn<RevolicoAdvertisementModel, String> categoryColumn;
     
     @FXML
@@ -371,11 +377,14 @@ public class FXMLDocumentController implements Initializable {
     private void populateAdvertisementTable() {
         table.setItems(items);
         titleColumn.setCellValueFactory(new PropertyValueFactory("title"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory("price"));
         categoryColumn.setCellValueFactory(cellData -> {
             return new SimpleStringProperty(advertisement.getKey(((RevolicoAdvertisementModel)cellData.getValue()).getCategory()));
         });
         publishedColumn.setCellValueFactory(new PropertyValueFactory("published"));
         
+        priceColumn.setCellFactory(centerCellFactory());
+        allowPublishColumn.setCellFactory(centerCellFactory());
         categoryColumn.setCellFactory(centerCellFactory());
         publishedColumn.setCellFactory(centerCellFactory());
         
@@ -830,8 +839,16 @@ public class FXMLDocumentController implements Initializable {
     private void updateAdvertisements(ObservableList<RevolicoAdvertisementModel> advs) {
         items = advs;
         // workaround until upgrade to jdk 8u60 or later.
+        ((TableColumn)table.getColumns().get(0)).setVisible(false);
+        ((TableColumn)table.getColumns().get(0)).setVisible(true);
+        ((TableColumn)table.getColumns().get(1)).setVisible(false);
+        ((TableColumn)table.getColumns().get(1)).setVisible(true);
         ((TableColumn)table.getColumns().get(2)).setVisible(false);
         ((TableColumn)table.getColumns().get(2)).setVisible(true);
+        ((TableColumn)table.getColumns().get(3)).setVisible(false);
+        ((TableColumn)table.getColumns().get(3)).setVisible(true);
+        ((TableColumn)table.getColumns().get(4)).setVisible(false);
+        ((TableColumn)table.getColumns().get(4)).setVisible(true);
         populateAdvertisementTable();
     }
 
