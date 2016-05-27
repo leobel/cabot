@@ -145,15 +145,15 @@
                </VBox>
                <VBox>
                   <children>
-                     <Label text="Scheduler">
+                     <Label fx:id="schedulerStatus" text="Scheduler (Activo)">
                         <VBox.margin>
                            <Insets left="5.0" />
                         </VBox.margin>
                      </Label>
                      <ToolBar style="-fx-background-color: trasparent;">
                        <items>
-                         <Button fx:id="stopScheduler" mnemonicParsing="false" text="Detener" />
-                           <Button fx:id="startScheduler" mnemonicParsing="false" text="Iniciar" />
+                         <Button fx:id="stopScheduler" mnemonicParsing="false" onAction="#stopScheduler" text="Detener" />
+                           <Button fx:id="startScheduler" mnemonicParsing="false" onAction="#startScheduler" text="Iniciar" />
                        </items>
                      </ToolBar>
                   </children>

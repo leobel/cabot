@@ -160,4 +160,12 @@ public class SchedulerManager {
         JobKey key = new JobKey(result.getString("JOB_NAME"), result.getString("JOB_GROUP"));
         scheduler.resumeJob(key);
     }
+
+    void stop() throws SchedulerException {
+        scheduler.pauseAll();
+    }
+
+    void startAll() throws SchedulerException {
+        scheduler.resumeAll();
+    }
 }

@@ -160,6 +160,15 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button deleteTrigger;
     
+    @FXML
+    private Label schedulerStatus;
+    
+    @FXML
+    private Button stopScheduler;
+    
+    @FXML
+    private Button startScheduler;
+    
     @FXML 
     private TableView table;
     
@@ -607,6 +616,36 @@ public class FXMLDocumentController implements Initializable {
         } catch (SchedulerException | SQLException ex) {
             Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error eliminando la tarea automática\n" + ex.getMessage() + "\nLOG-EXCEPTION");
             Cabot.showExceptionDialog(ex, "Error eliminado la tarea automática");            
+        }
+    }
+    
+    @FXML
+    private void stopScheduler(ActionEvent ae){
+        try {
+            schedulerManager.stop();
+            ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
+            updateTriggers(triggs);
+            Platform.runLater(() -> {
+                schedulerStatus.setText("Scheduler (Inactivo)");
+            });
+        } catch (SchedulerException | SQLException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error trying to stop the scheduler\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
+            Cabot.showExceptionDialog(ex, "Error parando el scheduler");
+        }
+    }
+    
+    @FXML
+    private void startScheduler(ActionEvent ae){
+        try {
+            schedulerManager.startAll();
+            ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
+            updateTriggers(triggs);
+            Platform.runLater(() -> {
+                schedulerStatus.setText("Scheduler (Activo)");
+            });
+        } catch (SchedulerException | SQLException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error starting the scheduler\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
+            Cabot.showExceptionDialog(ex, "Error iniciando el scheduler");
         }
     }
     
