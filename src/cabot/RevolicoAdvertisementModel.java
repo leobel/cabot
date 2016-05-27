@@ -31,13 +31,15 @@ public class RevolicoAdvertisementModel {
     private final SimpleStringProperty imageB;
     private final SimpleStringProperty imageC;
     private final SimpleStringProperty published;
+    private final SimpleBooleanProperty allowPublish;
 
     
-    public RevolicoAdvertisementModel(String title ,String category, String email, int published){
+    public RevolicoAdvertisementModel(String title ,String category, String email, int published, Boolean allowPublish){
         this.title = new SimpleStringProperty(title);
         this.category = new SimpleStringProperty(category);
         this.email = new SimpleStringProperty(email);
         this.published = new SimpleStringProperty(Integer.toString(published));
+        this.allowPublish = new SimpleBooleanProperty(allowPublish);
         this.price = new SimpleStringProperty("");
         this.description = new SimpleStringProperty("");
         this.emailEnabled = new SimpleStringProperty("1");
@@ -49,16 +51,17 @@ public class RevolicoAdvertisementModel {
     }
     
     public RevolicoAdvertisementModel(){
-        this("", "", "", 0);
+        this("", "", "", 0, true);
     }
 
-    RevolicoAdvertisementModel(Integer id, String title, String category, String email, int published,
+    RevolicoAdvertisementModel(Integer id, String title, String category, String email, int published, Boolean allowPublish,
             String name, String description, String emailEnabled, String phone, String price) {
         this.id = id;
         this.title = new SimpleStringProperty(title);
         this.category = new SimpleStringProperty(category);
         this.email = new SimpleStringProperty(email);
         this.published = new SimpleStringProperty(Integer.toString(published));
+        this.allowPublish = new SimpleBooleanProperty(allowPublish);
         this.price = new SimpleStringProperty(price);
         this.description = new SimpleStringProperty(description);
         this.emailEnabled = new SimpleStringProperty(emailEnabled);
@@ -106,6 +109,12 @@ public class RevolicoAdvertisementModel {
     public String getPublished(){ return published.get();}
     public SimpleStringProperty getPublishedProperty() {
         return published;
+    }
+    
+    public void setAllow(Boolean value){ allowPublish.set(value);}
+    public Boolean getAllow(){ return allowPublish.get();}
+    public SimpleBooleanProperty getAllowProperty() {
+        return allowPublish;
     }
 
     public void setEmailEnabled(String value){ emailEnabled.set(value);}

@@ -58,7 +58,7 @@ public class RevolicoAdvertisementDao {
             while(advs.next()){
                 RevolicoAdvertisementModel model = new RevolicoAdvertisementModel(
                         advs.getInt("ID"),
-                        advs.getString("TITLE"), advs.getString("CATEGORY"), advs.getString("EMAIL"), advs.getInt("PUBLISHED"),
+                        advs.getString("TITLE"), advs.getString("CATEGORY"), advs.getString("EMAIL"), advs.getInt("PUBLISHED"), advs.getBoolean("ALLOW_PUBLISH"),
                         advs.getString("NAME"), advs.getString("DESCRIPTION"), advs.getString("EMAIL_ENABLED"),
                         advs.getString("PHONE"), advs.getString("PRICE"));
                 advertisements.add(model);
@@ -202,7 +202,7 @@ public class RevolicoAdvertisementDao {
             advs.first();
             model = new RevolicoAdvertisementModel(
                         advs.getInt("ID"),
-                        advs.getString("TITLE"), advs.getString("CATEGORY"), advs.getString("EMAIL"), advs.getInt("PUBLISHED"),
+                        advs.getString("TITLE"), advs.getString("CATEGORY"), advs.getString("EMAIL"), advs.getInt("PUBLISHED"), advs.getBoolean("ALLOW_PUBLISH"),
                         advs.getString("NAME"), advs.getString("DESCRIPTION"), advs.getString("EMAIL_ENABLED"),
                         advs.getString("PHONE"), advs.getString("PRICE"));
             String images = String.format("SELECT * FROM IMAGE WHERE ID='%d'", id);
@@ -220,6 +220,16 @@ public class RevolicoAdvertisementDao {
             Cabot.showExceptionDialog(ex, "Error obteniendo los datos del anuncio");
         }
         return model;
+    }
+
+    void updateAllowPublish(Integer id, Boolean selected) {
+        try(Statement exec = connection.createStatement()){
+            String sql = String.format("UPDATE ADVERTISEMENT SET ALLOW_PUBLISH='%s' WHERE ID='%d'", selected.toString(), id);
+            exec.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(Cabot.class.getName()).error("LOG-EXCEPTION-NOTIFICATION at " + new Date()  + "\n Exception trying to update advertisement allow to publish\n" + ex.getMessage() + "\nLOG-EXCEPTION-NOTIFICATION");
+            Cabot.showExceptionDialog(ex, "Error en la actualización si se desea que el anuncio sea publicado");
+        }
     }
 
     

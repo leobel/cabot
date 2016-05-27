@@ -6,13 +6,13 @@
 package cabot;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,11 +26,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
 import org.controlsfx.validation.Severity;
-import org.controlsfx.validation.ValidationMessage;
-import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
@@ -39,6 +37,7 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import static org.quartz.TriggerBuilder.newTrigger;
+import org.quartz.TriggerKey;
 
 /**
  * FXML Controller class
@@ -158,6 +157,7 @@ public class TriggerFormController implements Initializable {
     private ValidationSupport validationSupport;
     private Validator<String> validateDate;
     private Pattern date;
+    private FXMLDocumentController controller;
 
     /**
      * Initializes the controller class.
@@ -324,9 +324,16 @@ public class TriggerFormController implements Initializable {
                 Trigger trigger = builder.build();
                 // Tell quartz to schedule the trigger for the job
                 schedulerManager.addTrigger(trigger, advertisement);
+                if(!advertisement.getAllow()){
+                    TriggerKey key = trigger.getKey();
+                    schedulerManager.stopTrigger(key.getName(), key.getGroup());
+                }
+                ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
+                controller.updateTriggers(triggs);
                 close(event);
-            } catch (SchedulerException | ParseException ex) {
-                Logger.getLogger(TriggerFormController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SchedulerException | SQLException| ParseException ex) {
+                Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date() + " Error insertando un nuevo scheduler\n" + ex.getMessage() + "\nLOG-EXCEPTION");                        
+                Cabot.showExceptionDialog(ex, "Error insertando un nuevo scheduler");
             }
         }else {
             
@@ -348,9 +355,10 @@ public class TriggerFormController implements Initializable {
        close(event);
     }
 
-    void setContext(RevolicoAdvertisementModel advertisement, SchedulerManager schedulerManager) {
+    void setContext(RevolicoAdvertisementModel advertisement, SchedulerManager schedulerManager, FXMLDocumentController controller) {
         this.advertisement = advertisement;
         this.schedulerManager = schedulerManager;
+        this.controller = controller;
     }
 
     private Date buildDate(DatePicker start, TextField startTime) throws ParseException {

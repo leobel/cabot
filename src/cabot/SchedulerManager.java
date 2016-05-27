@@ -144,4 +144,20 @@ public class SchedulerManager {
     void close() throws SchedulerException {
         scheduler.shutdown();
     }
+
+    void stopAdvertisement(Integer id) throws SQLException, SchedulerException {
+        Statement exec = connection.createStatement();
+        ResultSet result = exec.executeQuery(String.format("SELECT * FROM ADVERTISEMENT_JOB WHERE ID='%d'", id));
+        result.first();
+        JobKey key = new JobKey(result.getString("JOB_NAME"), result.getString("JOB_GROUP"));
+        scheduler.pauseJob(key);
+    }
+
+    void startAdvertisement(Integer id) throws SQLException, SchedulerException {
+        Statement exec = connection.createStatement();
+        ResultSet result = exec.executeQuery(String.format("SELECT * FROM ADVERTISEMENT_JOB WHERE ID='%d'", id));
+        result.first();
+        JobKey key = new JobKey(result.getString("JOB_NAME"), result.getString("JOB_GROUP"));
+        scheduler.resumeJob(key);
+    }
 }

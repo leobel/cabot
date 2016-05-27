@@ -57,6 +57,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -86,7 +87,10 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.TableViewSelectionModel;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -166,7 +170,7 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn priceColumn;
      
     @FXML
-    private TableColumn allowPublishColumn;
+    private TableColumn<RevolicoAdvertisementModel, Boolean> allowPublishColumn;
     
     @FXML
     private TableColumn<RevolicoAdvertisementModel, String> categoryColumn;
@@ -378,16 +382,37 @@ public class FXMLDocumentController implements Initializable {
         table.setItems(items);
         titleColumn.setCellValueFactory(new PropertyValueFactory("title"));
         priceColumn.setCellValueFactory(new PropertyValueFactory("price"));
+        //allowPublishColumn.setCellValueFactory(new PropertyValueFactory<>("allow"));
         categoryColumn.setCellValueFactory(cellData -> {
             return new SimpleStringProperty(advertisement.getKey(((RevolicoAdvertisementModel)cellData.getValue()).getCategory()));
         });
         publishedColumn.setCellValueFactory(new PropertyValueFactory("published"));
         
         priceColumn.setCellFactory(centerCellFactory());
-        allowPublishColumn.setCellFactory(centerCellFactory());
         categoryColumn.setCellFactory(centerCellFactory());
+        allowPublishColumn.setCellFactory( CheckBoxTableCell.forTableColumn((Integer param) -> {
+           return items.get(param).getAllowProperty();
+        }));
+        allowPublishColumn.setEditable(true);
         publishedColumn.setCellFactory(centerCellFactory());
-        
+        for (RevolicoAdvertisementModel advs : items) {
+            advs.getAllowProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean wasSelected, Boolean isSelected) -> {
+                try {
+                    Integer id = advs.getId();
+                    advertisement.updateAllowPublish(id, isSelected);
+                    if(!isSelected){
+                        stopAdvertisement(id);
+                    }else{
+                        startAdvertisement(id);
+                    }
+                    ObservableList<JobModel> triggs = schedulerManager.getTriggers(true);
+                    updateTriggers(triggs);
+                } catch (SchedulerException | SQLException ex) {
+                    Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error trying to change advertisement allow_publish\n" + ex.getMessage() + "\nLOG-EXCEPTION");
+                    Cabot.showExceptionDialog(ex, "Error tratando de cambiar si el anuncio se puede publicar o no");
+                }
+            });
+        }
         if(items.isEmpty()){
             table.setPlaceholder(new Label("No hay anuncios en la base de datos"));
         }
@@ -538,7 +563,7 @@ public class FXMLDocumentController implements Initializable {
             stage.setScene(new Scene(form));
             stage.show();
             TriggerFormController controller = (TriggerFormController)fxmlLoader.getController();
-            controller.setContext(selectedAdvertisement, schedulerManager);
+            controller.setContext(selectedAdvertisement, schedulerManager, this);
             controller.start();
             
         } catch (IOException ex) {
@@ -852,7 +877,7 @@ public class FXMLDocumentController implements Initializable {
         populateAdvertisementTable();
     }
 
-    private void updateTriggers(ObservableList<JobModel> triggs) {
+    public void updateTriggers(ObservableList<JobModel> triggs) {
         triggers = triggs;
         // workaround until upgrade to jdk 8u60 or later.
         ((TableColumn)triggerTableView.getColumns().get(2)).setVisible(false);
@@ -1169,6 +1194,24 @@ public class FXMLDocumentController implements Initializable {
             file.setExecutable(true, true);
         }
        
+    }
+
+    private void stopAdvertisement(Integer id) {
+        try {
+            schedulerManager.stopAdvertisement(id);
+        } catch (SQLException | SchedulerException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error al parar los scheduler del anuncio\n" + ex.getMessage() + "\nLOG-EXCEPTION");
+            Cabot.showExceptionDialog(ex, "Error al parar los scheduler del anuncio");
+        } 
+    }
+
+    private void startAdvertisement(Integer id) {
+        try {
+            schedulerManager.startAdvertisement(id);
+        } catch (SQLException | SchedulerException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error al parar los scheduler del anuncio\n" + ex.getMessage() + "\nLOG-EXCEPTION");
+            Cabot.showExceptionDialog(ex, "Error al parar los scheduler del anuncio");
+        } 
     }
     
 }
