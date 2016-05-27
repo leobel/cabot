@@ -139,6 +139,9 @@ public class FXMLDocumentController implements Initializable {
     private Button addAdvertisement;
     
     @FXML 
+    private Button editAdvertisement;
+    
+    @FXML 
     private Button deleteAdvertisement;
     
     @FXML
@@ -240,6 +243,7 @@ public class FXMLDocumentController implements Initializable {
                     (ObservableValue observable, Object oldValue, Object newValue) -> {
                         if(newValue != null){
                             selectedAdvertisement = (RevolicoAdvertisementModel) newValue;
+                            editAdvertisement.setDisable(false);
                             deleteAdvertisement.setDisable(false);
                             addTrigger.setDisable(false);
                         }
@@ -274,6 +278,7 @@ public class FXMLDocumentController implements Initializable {
                 @Override
                 public void changed(ObservableValue observable, Boolean oldValue, Boolean newValue) {
                     if(newValue){
+                        editAdvertisement.setDisable(true);
                         deleteAdvertisement.setDisable(true);
                         addTrigger.setDisable(true);
                         selectedAdvertisement = null;
@@ -470,7 +475,27 @@ public class FXMLDocumentController implements Initializable {
             stage.setScene(new Scene(form));
             stage.show();
             RevolicoFormController controller = ((RevolicoFormController)fxmlLoader.getController());
-            controller.setContext(advertisement, schedulerManager);
+            controller.setContext(advertisement, schedulerManager, null);
+            controller.start();
+        } catch (IOException ex) {
+            Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error insertando el anuncio\n" + ex.getMessage() + "\nLOG-EXCEPTION");            
+            Cabot.showExceptionDialog(ex, "Error insertando el anuncio");
+        }
+    }
+    
+    @FXML
+    private void editAdvertisement(ActionEvent ae){
+        try {
+            Stage stage = new Stage();
+            Callback<Class<?>, Object> gcf = clazz -> injector.getInstance(clazz);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RevolicoForm.fxml"));
+            fxmlLoader.setControllerFactory(gcf);
+            Parent form = fxmlLoader.load();
+            stage.setScene(new Scene(form));
+            stage.show();
+            RevolicoFormController controller = ((RevolicoFormController)fxmlLoader.getController());
+            RevolicoAdvertisementModel model = advertisement.getAdvertisement(selectedAdvertisement.getId());
+            controller.setContext(advertisement, schedulerManager, model);
             controller.start();
         } catch (IOException ex) {
             Logger.getLogger(Cabot.class.getName()).fatal("LOG-EXCEPTION\n at " + new Date()  + " Error insertando el anuncio\n" + ex.getMessage() + "\nLOG-EXCEPTION");            

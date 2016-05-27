@@ -7,6 +7,7 @@
 package cabot;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +17,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import postautomaticads.AutomaticAdsAdapter;
 import postautomaticads.CaptchaService;
 import postautomaticads.ConnectionConfig;
-import postautomaticads.HttpConnection;
 import postautomaticads.RevolicoAutomaticAds;
 import postautomaticads.RevolicoScrapper;
 import postautomaticads.Scrapper;
@@ -98,5 +98,26 @@ public class RevolicoAutomaticAdsFactory {
     
     public void setScrappOptions(Map<String, String>scrappOptions){
         this.scrappOptions = scrappOptions;
+    }
+
+    Map<String, String> getAdvertisement(String id) {
+        RevolicoAdvertisementModel model = advertisementManager.getAdvertisement(Integer.parseInt(id));
+        Map<String, String> result = new HashMap<>();
+        result.put("ID", model.getId().toString());
+        result.put(PRICE, model.getPrice());
+        result.put(CATEGORY, model.getCategory());
+        result.put(HEADLINE, model.getTitle());
+        result.put(TEXT, model.getDescription());
+        result.put(EMAIL, model.getEmail());
+        result.put(NAME, model.getName());
+        result.put(PHONE, model.getPhone());
+        result.put(EMAIL_ENABLED, model.getEmailEnabled());
+        if(!model.getImageA().isEmpty()) result.put(PICTURE_A, model.getImageA());
+        if(!model.getImageB().isEmpty()) result.put(PICTURE_B, model.getImageB());
+        if(!model.getImageC().isEmpty()) result.put(PICTURE_C, model.getImageC());
+        result.put(SEND_FORM, SEND_ACTION);
+        result.put(FILE_SIZE_NAME, FILE_SIZE);
+        
+        return result;
     }
 }

@@ -114,6 +114,7 @@ public class RevolicoFormController implements Initializable {
     
     ValidationSupport validationSupport;
     private Validator<String> v;
+    private String action;
     
     
     /**
@@ -146,18 +147,22 @@ public class RevolicoFormController implements Initializable {
     private void save(ActionEvent event){
         if(!validationSupport.isInvalid()){
             try {
-                Integer id = advertisement.add(model);
-                Map<String, String> map = createJobData(model);
-                JobDataMap jdm = new JobDataMap(map);
-                JobKey key = new JobKey(id.toString(), "revolico");
-                JobDetail job = newJob(RevolicoJob.class)
-                        .withIdentity(key)
-                        .storeDurably()
-                        .usingJobData(jdm)
-                        .build();
-                schedulerManager.addJob(job, true);
-                advertisement.addAdvertisementJob(id, key.getName(), key.getGroup());
-
+                if(action.equals("INSERT")){
+                    Integer id = advertisement.add(model);
+                    Map<String, String> map = createJobData(model);
+                    JobDataMap jdm = new JobDataMap(map);
+                    JobKey key = new JobKey(id.toString(), "revolico");
+                    JobDetail job = newJob(RevolicoJob.class)
+                            .withIdentity(key)
+                            .storeDurably()
+                            .usingJobData(jdm)
+                            .build();
+                    schedulerManager.addJob(job, true);
+                    advertisement.addAdvertisementJob(id, key.getName(), key.getGroup());
+                }
+                else{
+                    advertisement.updateAdvertisement(model);
+                }
                 Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
                 stage.close();
             } catch (SQLException | SchedulerException ex) {
@@ -282,32 +287,47 @@ public class RevolicoFormController implements Initializable {
                 title.setText(s);
             }
         });
+        if(action.equals("UPDATE")){
+            String imageA = model.getImageA();
+            String imageB = model.getImageB();
+            String imageC = model.getImageC();
+            if(!imageA.isEmpty()) labelImageA.setText(imageA);
+            if(!imageB.isEmpty()) labelImageB.setText(imageB);
+            if(!imageC.isEmpty()) labelImageC.setText(imageC);
+        }
     }
 
-    public void setContext(RevolicoAdvertisementDao advertisements, SchedulerManager schedulerManager) {
+    public void setContext(RevolicoAdvertisementDao advertisements, SchedulerManager schedulerManager, RevolicoAdvertisementModel model) {
         this.advertisement = advertisements;
         this.schedulerManager = schedulerManager;
         this.categories = advertisement.getCategories();
-        this.model = new RevolicoAdvertisementModel();
+        if(model == null){
+            action = "INSERT";
+            this.model = new RevolicoAdvertisementModel();
+        }
+        else{
+            action = "UPDATE";
+            this.model = model;
+        }
         setupBinding();
     }
 
     private Map<String, String> createJobData(RevolicoAdvertisementModel model) {
         Map<String, String> result = new HashMap<>();
         result.put("ID", model.getId().toString());
-        result.put(RevolicoAutomaticAdsFactory.PRICE, model.getPrice());
-        result.put(RevolicoAutomaticAdsFactory.CATEGORY, model.getCategory());
-        result.put(RevolicoAutomaticAdsFactory.HEADLINE, model.getTitle());
-        result.put(RevolicoAutomaticAdsFactory.TEXT, model.getDescription());
-        result.put(RevolicoAutomaticAdsFactory.EMAIL, model.getEmail());
-        result.put(RevolicoAutomaticAdsFactory.NAME, model.getName());
-        result.put(RevolicoAutomaticAdsFactory.PHONE, model.getPhone());
-        result.put(RevolicoAutomaticAdsFactory.EMAIL_ENABLED, model.getEmailEnabled());
-        if(!model.getImageA().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_A, model.getImageA());
-        if(!model.getImageB().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_B, model.getImageB());
-        if(!model.getImageC().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_C, model.getImageC());
-        result.put(RevolicoAutomaticAdsFactory.SEND_FORM, RevolicoAutomaticAdsFactory.SEND_ACTION);
-        result.put(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME, RevolicoAutomaticAdsFactory.FILE_SIZE);
+//        result.put(RevolicoAutomaticAdsFactory.PRICE, model.getPrice());
+//        result.put(RevolicoAutomaticAdsFactory.CATEGORY, model.getCategory());
+//        result.put(RevolicoAutomaticAdsFactory.HEADLINE, model.getTitle());
+//        result.put(RevolicoAutomaticAdsFactory.TEXT, model.getDescription());
+//        result.put(RevolicoAutomaticAdsFactory.EMAIL, model.getEmail());
+//        result.put(RevolicoAutomaticAdsFactory.NAME, model.getName());
+//        result.put(RevolicoAutomaticAdsFactory.PHONE, model.getPhone());
+//        result.put(RevolicoAutomaticAdsFactory.EMAIL_ENABLED, model.getEmailEnabled());
+//        if(!model.getImageA().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_A, model.getImageA());
+//        if(!model.getImageB().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_B, model.getImageB());
+//        if(!model.getImageC().isEmpty()) result.put(RevolicoAutomaticAdsFactory.PICTURE_C, model.getImageC());
+//        result.put(RevolicoAutomaticAdsFactory.SEND_FORM, RevolicoAutomaticAdsFactory.SEND_ACTION);
+//        result.put(RevolicoAutomaticAdsFactory.FILE_SIZE_NAME, RevolicoAutomaticAdsFactory.FILE_SIZE);
         
         return result;
     }
