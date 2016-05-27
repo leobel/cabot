@@ -263,7 +263,7 @@ public class RevolicoFormController implements Initializable {
         
         emailEnabledOne.setToggleGroup(radioToggleGroup);
         emailEnabledTwo.setToggleGroup(radioToggleGroup);
-        if(model.getEmailEnabled() == "1"){
+        if(model.getEmailEnabled().equals("1")){
             radioToggleGroup.selectToggle(radioToggleGroup.getToggles().get(0));
         }
         else{
