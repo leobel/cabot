@@ -1,4 +1,4 @@
-<strong>Welcome to Cabot Submitter!</strong> With this software you can submit advertisements in <a href="http://negdesign.ddns.net" target="_blank">Revolico</a> automatically with minimal human supervision. So lets get start it!
+<strong>Welcome to Cabot Submitter!</strong> With this software you can submit advertisements in <a href="https://www.revolico.com" target="_blank">Revolico</a> automatically with minimal human supervision. So lets get start it!
 
 <strong>Installation Guide</strong>
 
